@@ -1,5 +1,5 @@
 import pygame
-from collorPallets import *
+from graphicOptions import *
 
 pygame.init()
 font = pygame.font.Font(None,40)

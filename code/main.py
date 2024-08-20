@@ -1,7 +1,7 @@
 import pygame,sys
 from settings import *
 from debug import Debug
-from collorPallets import *
+from graphicOptions import *
 from level import Level
 
 class Game:
