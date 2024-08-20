@@ -1,10 +1,13 @@
+# MEU CODIGO
+
 import pygame
 from settings import *
 from tile import Tile
 from player import Player
 from debug import Debug
-from graphicOptions import *
 from support import *
+from random import choice
+from weapon import Weapon
 
 class Level:
     def __init__(self):
@@ -18,6 +21,9 @@ class Level:
         self.visible_sprites = YSortCameraGroup(self.level_number)
         self.obstacles_sprites = pygame.sprite.Group()
 
+        # attack sprites
+        #self.current_attack = None
+
         #sprite setup
         self.create_map()
 
@@ -30,7 +36,8 @@ class Level:
         }
         
         graphics = {
-            'grass' : import_csv_layout(GRAPHIC_GRASS[level])
+            'grass' : import_folder(GRAPHIC_GRASS[level]),
+            'objects' : import_folder(GRAPHIC_OBJECTS[level])
         }
         
         for style,layout in layouts.items():
@@ -41,20 +48,26 @@ class Level:
                         y = row_index * TILESIZE
                         if style == 'boundary':
                             Tile((x,y),[self.obstacles_sprites],'invisible')
-                        if style == 'grass':
-                            Tile((x,y),[self.obstacles_sprites],'invisible')
-                        if style == 'object':
-                            Tile((x,y),[self.obstacles_sprites],'invisible')
+                        if style == GRASS_REGULAR:
+                            random_grass_image = choice(graphics[GRASS_REGULAR_FOLDER])
+                            Tile((x,y),[self.visible_sprites,self.obstacles_sprites],GRASS_REGULAR,random_grass_image)
+                        if style == OBJECT_2Y:
+                            surf = graphics[OBJECT_2Y_FOLDER][int(col)]
+                            Tile((x,y),[self.visible_sprites,self.obstacles_sprites],OBJECT_2Y,surf)
 
 
-        self.player = Player((2500,1750),[self.visible_sprites],self.obstacles_sprites) #used for testing pure map (commenting lines above)
+        self.player = Player((2000,1430), [self.visible_sprites], self.obstacles_sprites, self.create_attack)
 
+    def create_attack(self):
+        Weapon(self.player,[self.visible_sprites])
 
     def run(self):
         #update and draw the game
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
-        Debug(self.player.direction) # enables direction print on screen
+        #Debug(self.player.direction) # enables direction print on screen
+        #Debug(self.player.status) # enables status print on screen
+        #Debug(self.player.weapon) 
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self, level_number):

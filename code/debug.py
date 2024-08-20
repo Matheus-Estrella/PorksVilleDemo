@@ -1,5 +1,5 @@
 import pygame
-from graphicOptions import *
+from settings import *
 
 pygame.init()
 font = pygame.font.Font(None,40)
