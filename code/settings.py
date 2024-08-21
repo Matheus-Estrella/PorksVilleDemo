@@ -37,11 +37,11 @@ CHARACTER_ANIMATIONS = {
             'up_attack':[],'down_attack':[],'left_attack':[],'right_attack':[]
         }
 
-#Components sources
+# Components sources
 TEST_PLAYER = '../graphics/test/player.png'
 TEST_ROCK = '../graphics/test/rock.png'
 
-#Background Components sources
+# Background Components sources
 GRAPHIC_GRASS = ['../graphics/grass']
 GRAPHIC_OBJECTS = ['../graphics/objects']
 
@@ -61,4 +61,30 @@ WEAPON_DATA = {
     WEAPON_5 : {'cooldown':100,'damage':15,'graphic':f'../graphics/weapons/{WEAPON_5}/full.png'}
 }
 
+# STATS
+HEALTH = 'health'
+ENERGY = 'energy'
+SPEED = 'speed'
+
+STATS = {HEALTH:100,ENERGY:60,'attack':10,'magic':4,SPEED:5}
+
+# UI
+BAR_HEIGHT = 20
+HEALTH_BAR_WIDTH = 200
+ENERGY_BAR_WIDTH = 140
+ITEM_BOX_SIZE = 80
+
+UI_FONT = '../graphics/font/joystix.ttf'
+UI_FONT_SIZE = 18
+
+# general colors
+WATER_COLOR = '#71ddee'
+UI_BG_COLOR = '#222222'
+UI_BORDER_COLOR = '#111111'
+TEXT_COLOR = '#EEEEEE'
+
+# ui colors
+HEALTH_COLOR = 'red'
+ENERGY_COLOR = 'blue'
+UI_BORDER_COLOR_ACTIVE = 'gold'
 

@@ -1,5 +1,3 @@
-# MEU CODIGO
-
 import pygame
 from settings import *
 from tile import Tile
@@ -8,6 +6,7 @@ from debug import Debug
 from support import *
 from random import choice
 from weapon import Weapon
+from ui import UI
 
 class Level:
     def __init__(self):
@@ -22,10 +21,13 @@ class Level:
         self.obstacles_sprites = pygame.sprite.Group()
 
         # attack sprites
-        #self.current_attack = None
+        self.current_attack = None
 
         #sprite setup
         self.create_map()
+
+        #user interface
+        self.ui = UI()
 
     def create_map(self):
         level = self.level_number
@@ -56,15 +58,21 @@ class Level:
                             Tile((x,y),[self.visible_sprites,self.obstacles_sprites],OBJECT_2Y,surf)
 
 
-        self.player = Player((2000,1430), [self.visible_sprites], self.obstacles_sprites, self.create_attack)
+        self.player = Player((2000,1430), [self.visible_sprites], self.obstacles_sprites, self.create_attack, self.destroy_attack)
 
     def create_attack(self):
-        Weapon(self.player,[self.visible_sprites])
+        self.current_attack = Weapon(self.player,[self.visible_sprites])
+
+    def destroy_attack(self):
+        if self.current_attack:
+            self.current_attack.kill()
+        self.current_attack = None
 
     def run(self):
         #update and draw the game
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
+        self.ui.display(self.player)
         #Debug(self.player.direction) # enables direction print on screen
         #Debug(self.player.status) # enables status print on screen
         #Debug(self.player.weapon) 

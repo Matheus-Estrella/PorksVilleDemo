@@ -4,7 +4,7 @@ from settings import *
 from support import import_folder
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self,pos,groups,obstacle_sprites, create_attack):
+    def __init__(self,pos,groups,obstacle_sprites, create_attack, destoy_attack):
         super().__init__(groups)
         self.image = pygame.image.load(TEST_PLAYER).convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
@@ -19,7 +19,6 @@ class Player(pygame.sprite.Sprite):
 
         # movement
         self.direction = pygame.math.Vector2()
-        self.speed = 5
         self.attacking = False
         self.attack_cooldown = 400
         self.attack_time = None
@@ -32,9 +31,20 @@ class Player(pygame.sprite.Sprite):
 
         # weapon
         self.create_attack = create_attack
+        self.destoy_attack = destoy_attack
         self.weapon_index = 0
         self.weapon = list(WEAPON_DATA.keys())[self.weapon_index]
+
+        self.can_switch_weapon = True
+        self.weapon_switch_time = None
+        self.weapon_switch_duration_cooldown = 200
         
+        # stats
+        self.stats = STATS
+        self.health = self.stats[HEALTH] * 0.5
+        self.energy = self.stats[ENERGY] * 0.8
+        self.speed = self.stats[SPEED]
+        self.exp = 0
 
     def import_player_assets(self):
         self.animations = CHARACTER_ANIMATIONS
@@ -76,6 +86,17 @@ class Player(pygame.sprite.Sprite):
             if keys[pygame.K_LCTRL]:
                 self.attacking = True
                 self.attack_time = pygame.time.get_ticks()
+
+            # Switch weapon input
+            if keys[pygame.K_q] and self.can_switch_weapon:
+                self.can_switch_weapon = False
+                self.weapon_switch_time = pygame.time.get_ticks()
+
+                if self.weapon_index < len(list(WEAPON_DATA.keys())) -1:
+                    self.weapon_index += 1
+                else:
+                    self.weapon_index = 0
+                self.weapon = list(WEAPON_DATA.keys())[self.weapon_index]
             
             # ABAIXO DESTAS LINHAS HÁ AS CONFIGURAÇÕES ADICIONAIS PARA PORKSVILLE
             # ENTRETANTO, FORAM IDENTADAS (CONTRA IDENTAR AO IMPLEMENTAR) E COMENTADAS (DESCOMENTAR AO IMPLEMENTAR)
@@ -161,6 +182,11 @@ class Player(pygame.sprite.Sprite):
         if self.attack_time:
             if current_time - self.attack_time >= self.attack_cooldown:
                 self.attacking = False
+                self.destoy_attack()
+        #switching weapons setups
+        if not self.can_switch_weapon:
+            if current_time - self.weapon_switch_time >= self.weapon_switch_duration_cooldown:
+                self.can_switch_weapon = True
 
     def animate(self):
         animation = self.animations[self.status]
