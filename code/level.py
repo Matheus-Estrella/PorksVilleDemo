@@ -7,6 +7,7 @@ from support import *
 from random import choice
 from weapon import Weapon
 from ui import UI
+from enemy import Enemy
 
 class Level:
     def __init__(self):
@@ -34,7 +35,8 @@ class Level:
         layouts = {
             'boundary': import_csv_layout(MAPS_BOUNDARIES[level]),
             'grass' : import_csv_layout(MAPS_GRASSES[level]),
-            'object' : import_csv_layout(MAPS_OBJECTS[level])
+            'object' : import_csv_layout(MAPS_OBJECTS[level]),
+            'entities' : import_csv_layout(MAPS_ENTITIES[level])
         }
         
         graphics = {
@@ -56,12 +58,28 @@ class Level:
                         if style == OBJECT_2Y:
                             surf = graphics[OBJECT_2Y_FOLDER][int(col)]
                             Tile((x,y),[self.visible_sprites,self.obstacles_sprites],OBJECT_2Y,surf)
-
-
-        self.player = Player((2000,1430), [self.visible_sprites], self.obstacles_sprites, self.create_attack, self.destroy_attack)
+                        if style == ENTITIES:
+                            if col == PLAYER_ID:
+                                self.player = Player( # adding player on map with its level functions
+                                    (x,y),
+                                    [self.visible_sprites],
+                                    self.obstacles_sprites,
+                                    self.create_attack,
+                                    self.destroy_attack,
+                                    self.create_magic
+                                )
+                            else:
+                                if col == MONSTER_1_ID: monster_name = MONSTER_1_NAME
+                                elif col == MONSTER_2_ID: monster_name = MONSTER_2_NAME
+                                elif col == MONSTER_3_ID: monster_name = MONSTER_3_NAME
+                                else: monster_name = MONSTER_4_NAME
+                                Enemy(monster_name,(x,y),[self.visible_sprites],self.obstacles_sprites)            
 
     def create_attack(self):
         self.current_attack = Weapon(self.player,[self.visible_sprites])
+
+    def create_magic(self,style,strength,cost):
+        pass
 
     def destroy_attack(self):
         if self.current_attack:
@@ -72,6 +90,7 @@ class Level:
         #update and draw the game
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
+        self.visible_sprites.enemy_update(self.player)
         self.ui.display(self.player)
         #Debug(self.player.direction) # enables direction print on screen
         #Debug(self.player.status) # enables status print on screen
@@ -102,3 +121,8 @@ class YSortCameraGroup(pygame.sprite.Group):
         for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image, offset_pos)
+    
+    def enemy_update(self,player):
+        enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite,'sprite_type') and sprite.sprite_type == 'enemy']
+        for enemy in enemy_sprites:
+            enemy.enemy_update(player)
