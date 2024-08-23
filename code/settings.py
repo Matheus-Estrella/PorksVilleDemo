@@ -1,3 +1,4 @@
+import pathlib
 # -------------------------------------------------------------------------------------------------------
 
 # Screen Settings
@@ -32,20 +33,20 @@ GRAPHIC_FOLDER = 'graphics'
 
 # -------------------------------------------------------------------------------------------------------
 
-# Gorund sources
-GROUNDIMAGE = ['../graphics/tilemap/ground.png',
-               '../graphics/tilemap/ground.png',
-               '../graphics/tilemap/ground.png',
-               '../graphics/tilemap/ground.png']
+# Ground sources
+GROUNDIMAGE = [pathlib.Path('graphics/tilemap/ground.png').resolve(),
+               pathlib.Path('graphics/tilemap/ground.png').resolve(),
+               pathlib.Path('graphics/tilemap/ground.png').resolve(),
+               pathlib.Path('graphics/tilemap/ground.png').resolve()]
 
 # Map sources
-MAPS_BOUNDARIES = ['../map/map_FloorBlocks.csv']
-MAPS_GRASSES = ['../map/map_Grass.csv']
-MAPS_OBJECTS = ['../map/map_Objects.csv']
-MAPS_ENTITIES =['../map/map_Entities.csv']
+MAPS_BOUNDARIES = [pathlib.Path('map/map_FloorBlocks.csv').resolve()]
+MAPS_GRASSES = [pathlib.Path('map/map_Grass.csv').resolve()]
+MAPS_OBJECTS = [pathlib.Path('map/map_Objects.csv').resolve()]
+MAPS_ENTITIES =[pathlib.Path('map/map_Entities.csv').resolve()]
 
 # Character assets
-CHARACTER_FOLDER = '../graphics/player/'
+CHARACTER_FOLDER = pathlib.Path('graphics/player').resolve()
 CHARACTER_ANIMATIONS = {
             'up':[],'down':[],'left':[],'right':[],
             'up_idle':[],'down_idle':[],'left_idle':[],'right_idle':[],
@@ -53,12 +54,12 @@ CHARACTER_ANIMATIONS = {
         }
 
 # Components sources
-TEST_PLAYER = '../graphics/test/player.png'
-TEST_ROCK = '../graphics/test/rock.png'
+TEST_PLAYER = pathlib.Path('graphics/test/player.png').resolve()
+TEST_ROCK = pathlib.Path('graphics/test/rock.png').resolve()
 
 # Background Components sources
-GRAPHIC_GRASS = ['../graphics/grass']
-GRAPHIC_OBJECTS = ['../graphics/objects']
+GRAPHIC_GRASS = [pathlib.Path('graphics/grass').resolve()]
+GRAPHIC_OBJECTS = [pathlib.Path('graphics/objects').resolve()]
 
 # -------------------------------------------------------------------------------------------------------
 # weapons
@@ -69,11 +70,11 @@ WEAPON_4 = 'rapier'
 WEAPON_5 = 'sai'
 
 WEAPON_DATA = {
-    WEAPON_1 : {'cooldown':100,'damage':15,GRAPHIC:f'../{GRAPHIC_FOLDER}/weapons/{WEAPON_1}/full.png'},
-    WEAPON_2 : {'cooldown':100,'damage':15,GRAPHIC:f'../{GRAPHIC_FOLDER}/weapons/{WEAPON_2}/full.png'},
-    WEAPON_3 : {'cooldown':100,'damage':15,GRAPHIC:f'../{GRAPHIC_FOLDER}/weapons/{WEAPON_3}/full.png'},
-    WEAPON_4 : {'cooldown':100,'damage':15,GRAPHIC:f'../{GRAPHIC_FOLDER}/weapons/{WEAPON_4}/full.png'},
-    WEAPON_5 : {'cooldown':100,'damage':15,GRAPHIC:f'../{GRAPHIC_FOLDER}/weapons/{WEAPON_5}/full.png'}
+    WEAPON_1 : {'cooldown':100,'damage':15,GRAPHIC: pathlib.Path(f'{GRAPHIC_FOLDER}/weapons/{WEAPON_1}/full.png').resolve()},
+    WEAPON_2 : {'cooldown':100,'damage':15,GRAPHIC: pathlib.Path(f'{GRAPHIC_FOLDER}/weapons/{WEAPON_2}/full.png').resolve()},
+    WEAPON_3 : {'cooldown':100,'damage':15,GRAPHIC: pathlib.Path(f'{GRAPHIC_FOLDER}/weapons/{WEAPON_3}/full.png').resolve()},
+    WEAPON_4 : {'cooldown':100,'damage':15,GRAPHIC: pathlib.Path(f'{GRAPHIC_FOLDER}/weapons/{WEAPON_4}/full.png').resolve()},
+    WEAPON_5 : {'cooldown':100,'damage':15,GRAPHIC: pathlib.Path(f'{GRAPHIC_FOLDER}/weapons/{WEAPON_5}/full.png').resolve()}
 }
 
 # -------------------------------------------------------------------------------------------------------
@@ -85,8 +86,8 @@ MAGIC_2 = 'heal'
 MAGIC_2_PARTICLE = 'heal'
 
 MAGIC_DATA = {
-    MAGIC_1 : {'strength':100,'cost':15,GRAPHIC:f'../{GRAPHIC_FOLDER}/particles/{MAGIC_1}/{MAGIC_1_PARTICLE}.png'},
-    MAGIC_2 : {'strength':100,'cost':15,GRAPHIC:f'../{GRAPHIC_FOLDER}/particles/{MAGIC_2}/{MAGIC_2_PARTICLE}.png'}
+    MAGIC_1 : {'strength':100,'cost':15,GRAPHIC: pathlib.Path(f'{GRAPHIC_FOLDER}/particles/{MAGIC_1}/{MAGIC_1_PARTICLE}.png').resolve()},
+    MAGIC_2 : {'strength':100,'cost':15,GRAPHIC: pathlib.Path(f'{GRAPHIC_FOLDER}/particles/{MAGIC_2}/{MAGIC_2_PARTICLE}.png').resolve()}
 }
 
 # -------------------------------------------------------------------------------------------------------
@@ -105,7 +106,7 @@ HEALTH_BAR_WIDTH = 200
 ENERGY_BAR_WIDTH = 140
 ITEM_BOX_SIZE = 80
 
-UI_FONT = '../graphics/font/joystix.ttf'
+UI_FONT = pathlib.Path('graphics/font/joystix.ttf').resolve()
 UI_FONT_SIZE = 18
 
 # general colors
@@ -129,7 +130,7 @@ MAGIC_BOX_POS_X = ITEM_BOX_POS_X + ITEM_BOX_SIZE + PADDING
 # -------------------------------------------------------------------------------------------------------
 
 # Enemies
-MONSTER_FOLDER = '../graphics/monsters/'
+MONSTER_FOLDER = pathlib.Path('graphics/monsters/').resolve()
 
 ATTACK_TYPE = 'attack_type' # for animations of the attack
 RESISTANCE = 'resistance' # if the player hits enemy, make a pushback
@@ -146,10 +147,10 @@ MONSTER_4_NAME = 'bamboo'
 MONSTER_4_ID = '390'
 
 MONSTER_DATA = {
-	MONSTER_1_NAME: {HEALTH: 100,'exp':100,'damage':20,ATTACK_TYPE: 'slash', 'attack_sound':'../audio/attack/slash.wav', SPEED: 3, RESISTANCE: 3, ATTACK_RADIUS: 80, NOTICE_RADIUS: 360},
-	MONSTER_2_NAME: {HEALTH: 300,'exp':250,'damage':40,ATTACK_TYPE: 'claw',  'attack_sound':'../audio/attack/claw.wav',SPEED: 2, RESISTANCE: 3, ATTACK_RADIUS: 120, NOTICE_RADIUS: 400},
-	MONSTER_3_NAME: {HEALTH: 100,'exp':110,'damage':8,ATTACK_TYPE: 'thunder', 'attack_sound':'../audio/attack/fireball.wav', SPEED: 4, RESISTANCE: 3, ATTACK_RADIUS: 60, NOTICE_RADIUS: 350},
-	MONSTER_4_NAME: {HEALTH: 70,'exp':120,'damage':6,ATTACK_TYPE: 'leaf_attack', 'attack_sound':'../audio/attack/slash.wav', SPEED: 3, RESISTANCE: 3, ATTACK_RADIUS: 50, NOTICE_RADIUS: 300}
+	MONSTER_1_NAME: {HEALTH: 100,'exp':100,'damage':20,ATTACK_TYPE: 'slash', 'attack_sound':pathlib.Path('audio/attack/slash.wav').resolve(), SPEED: 3, RESISTANCE: 3, ATTACK_RADIUS: 80, NOTICE_RADIUS: 360},
+	MONSTER_2_NAME: {HEALTH: 300,'exp':250,'damage':40,ATTACK_TYPE: 'claw',  'attack_sound':pathlib.Path('audio/attack/claw.wav').resolve(),SPEED: 2, RESISTANCE: 3, ATTACK_RADIUS: 120, NOTICE_RADIUS: 400},
+	MONSTER_3_NAME: {HEALTH: 100,'exp':110,'damage':8,ATTACK_TYPE: 'thunder', 'attack_sound':pathlib.Path('audio/attack/fireball.wav').resolve(), SPEED: 4, RESISTANCE: 3, ATTACK_RADIUS: 60, NOTICE_RADIUS: 350},
+	MONSTER_4_NAME: {HEALTH: 70,'exp':120,'damage':6,ATTACK_TYPE: 'leaf_attack', 'attack_sound':pathlib.Path('audio/attack/slash.wav').resolve(), SPEED: 3, RESISTANCE: 3, ATTACK_RADIUS: 50, NOTICE_RADIUS: 300}
 }
 
 monster_data = MONSTER_DATA

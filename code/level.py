@@ -45,42 +45,59 @@ class Level:
             'grass' : import_folder(GRAPHIC_GRASS[level]),
             'objects' : import_folder(GRAPHIC_OBJECTS[level])
         }
+
+        BOUNDARY = 'boundary'
+        GRASS_REGULAR = 'grass_regular'
+        OBJECT_2Y = 'object_2y'
+        ENTITIES = 'entities'
         
-        for style,layout in layouts.items():
-            for row_index,row in enumerate(layout):
-                for col_index,col in enumerate (row):
-                    if col != '-1':
-                        x = col_index * TILESIZE
-                        y = row_index * TILESIZE
-                        if style == 'boundary':
-                            Tile((x,y),[self.obstacles_sprites],'invisible')
-                        if style == GRASS_REGULAR:
-                            random_grass_image = choice(graphics[GRASS_REGULAR_FOLDER])
-                            Tile((x,y),
-                                 [self.visible_sprites,self.obstacles_sprites,self.attackable_sprites],
-                                 GRASS_REGULAR,random_grass_image)
-                        if style == OBJECT_2Y:
-                            surf = graphics[OBJECT_2Y_FOLDER][int(col)]
-                            Tile((x,y),[self.visible_sprites,self.obstacles_sprites],OBJECT_2Y,surf)
-                        if style == ENTITIES:
-                            if col == PLAYER_ID:
-                                self.player = Player( # adding player on map with its level functions
-                                    (x,y),
-                                    [self.visible_sprites],
-                                    self.obstacles_sprites,
-                                    self.create_attack,
-                                    self.destroy_attack,
-                                    self.create_magic
-                                )
-                            else:
-                                if col == MONSTER_1_ID: monster_name = MONSTER_1_NAME
-                                elif col == MONSTER_2_ID: monster_name = MONSTER_2_NAME
-                                elif col == MONSTER_3_ID: monster_name = MONSTER_3_NAME
-                                else: monster_name = MONSTER_4_NAME
-                                Enemy(monster_name,(x,y),
-                                      [self.visible_sprites, self.attackable_sprites],
-                                      self.obstacles_sprites,
-                                      self.damage_player)            
+        for style, layout in layouts.items():
+            total_elements = len(layout) * len(layout[0])
+
+            for index in range(total_elements):
+                row_index = index // len(layout[0])
+                col_index = index % len(layout[0])
+                col = layout[row_index][col_index]
+
+                if col == '-1':
+                    continue
+
+                x = col_index * TILESIZE
+                y = row_index * TILESIZE
+
+                if style == BOUNDARY:
+                    Tile((x, y), [self.obstacles_sprites], 'invisible')
+                elif style == GRASS_REGULAR:
+                    random_grass_image = choice(graphics[GRASS_REGULAR_FOLDER])
+                    
+                    Tile((x, y), [self.visible_sprites, self.obstacles_sprites, self.attackable_sprites], GRASS_REGULAR, random_grass_image)
+                elif style == OBJECT_2Y:
+                    surf = graphics[OBJECT_2Y_FOLDER][int(col)]
+
+                    Tile((x, y), [self.visible_sprites, self.obstacles_sprites], OBJECT_2Y, surf)
+                elif style == ENTITIES:
+                    if col == PLAYER_ID:
+                        self.player = Player(
+                            (x, y),
+                            [self.visible_sprites],
+                            self.obstacles_sprites,
+                            self.create_attack,
+                            self.destroy_attack,
+                            self.create_magic
+                        )
+                    else:
+                        monster_name = {
+                            MONSTER_1_ID: MONSTER_1_NAME,
+                            MONSTER_2_ID: MONSTER_2_NAME,
+                            MONSTER_3_ID: MONSTER_3_NAME
+                        }.get(col, MONSTER_4_NAME)
+                        Enemy(
+                            monster_name,
+                            (x, y),
+                            [self.visible_sprites, self.attackable_sprites],
+                            self.obstacles_sprites,
+                            self.damage_player
+                        )            
 
     def create_attack(self):
         self.current_attack = Weapon(self.player,[self.visible_sprites,self.attack_sprites])

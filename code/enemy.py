@@ -45,9 +45,9 @@ class Enemy(Entity):
 
     def import_graphics(self,name):
         self.animations = {'idle':[],'move':[],'attack':[]}
-        main_path = f'{MONSTER_FOLDER}{name}/'
+        main_path = MONSTER_FOLDER.joinpath(name)
         for animation in self.animations.keys():
-            self.animations[animation] = import_folder(main_path + animation)
+            self.animations[animation] = import_folder(main_path.joinpath(animation))
 
     def get_player_distance_direction(self,player):
         enemy_vec = pygame.math.Vector2(self.rect.center)
