@@ -129,7 +129,7 @@ MAGIC_BOX_POS_X = ITEM_BOX_POS_X + ITEM_BOX_SIZE + PADDING
 # -------------------------------------------------------------------------------------------------------
 
 # Enemies
-MONSTER_FOLDER = '../graphics/monsters/'
+MONSTER_FOLDER = f'../{GRAPHIC_FOLDER}/monsters/'
 
 ATTACK_TYPE = 'attack_type' # for animations of the attack
 RESISTANCE = 'resistance' # if the player hits enemy, make a pushback
@@ -153,3 +153,15 @@ MONSTER_DATA = {
 }
 
 monster_data = MONSTER_DATA
+
+# -------------------------------------------------------------------------------------------------------
+
+# Particles
+# some hardcodeds datas was kept in particles code to easier the process. For implementationa, try to transport
+# this data on this section
+PARTICLES_FOLDER = f'../{GRAPHIC_FOLDER}/particles/'
+
+LEAF = 'leaf'
+
+# -------------------------------------------------------------------------------------------------------
+

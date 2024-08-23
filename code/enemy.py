@@ -4,7 +4,7 @@ from entity import Entity
 from support import *
 
 class Enemy(Entity):
-    def __init__(self,monster_name,pos,groups,obstacle_sprites,damage_player):
+    def __init__(self,monster_name,pos,groups,obstacle_sprites,damage_player,trigger_death_particles):
     
         #general setup
         super().__init__(groups)
@@ -37,6 +37,7 @@ class Enemy(Entity):
         self.attack_time = None
         self.attack_cooldown = 400
         self.damage_player = damage_player
+        self.trigger_death_particles = trigger_death_particles
 
         # invincibility timer  # ---------> COULD BE ON ENTITIES?
         self.vulnerable = True
@@ -116,14 +117,15 @@ class Enemy(Entity):
             if attack_type == 'weapon':
                 self.health -= player.get_full_weapon_damage()
             else:
-                #magic damage
-                pass
+                self.health -= player.get_full_magic_damage()
+                #magic damage -- > For anothers spells attack, change here
             self.hit_time = pygame.time.get_ticks()
             self.vulnerable = False
         
     def check_death(self): # ---------> COULD BE ON ENTITIES?
         if self.health <= 0:
             self.kill()
+            self.trigger_death_particles(self.rect.center,self.monster_name)
 
     def hit_reaction(self): # ---------> COULD BE ON ENTITIES or GRASSES?
         if not self.vulnerable:

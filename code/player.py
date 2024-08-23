@@ -52,6 +52,9 @@ class Player(Entity):
         self.energy = self.stats[ENERGY] * 0.8
         self.speed = self.stats[SPEED]
         self.exp = 0
+        self.energy_fill_speed = 0.01
+        self.dm_energy_speed = 0.09
+        self.health_fill_speed = 0.01
 
         # damage timer
         self.vulnerable = True
@@ -221,8 +224,17 @@ class Player(Entity):
         base_damage = self.stats['attack']
         weapon_damage = WEAPON_DATA[self.weapon]['damage']
         return base_damage+weapon_damage
+    
+    def get_full_magic_damage(self):
+        base_damage = self.stats['attack']
+        magic_damage = MAGIC_DATA[self.magic]['strength']
+        return base_damage+magic_damage
 
-
+    def energy_recovery(self):
+        if self.energy < self.stats[ENERGY]:
+            self.energy += (self.energy_fill_speed + self.dm_energy_speed) * self.stats[MAGIC]
+        else:
+            self.energy = self.stats[ENERGY]
 
     def update(self):
         self.input()
@@ -230,5 +242,6 @@ class Player(Entity):
         self.get_status()
         self.animate()
         self.move(self.speed)
+        self.energy_recovery()
 
 
