@@ -4,7 +4,7 @@ from entity import Entity
 from support import *
 
 class Enemy(Entity):
-    def __init__(self,monster_name,pos,groups,obstacle_sprites,damage_player,trigger_death_particles):
+    def __init__(self,monster_name,pos,groups,obstacle_sprites,damage_player,trigger_death_particles,add_exp):
     
         #general setup
         super().__init__(groups)
@@ -33,6 +33,7 @@ class Enemy(Entity):
         self.attack_type = monster_info[ATTACK_TYPE]
 
         # player interaction
+        self.add_exp = add_exp
         self.can_attack = True
         self.attack_time = None
         self.attack_cooldown = 400
@@ -126,6 +127,7 @@ class Enemy(Entity):
         if self.health <= 0:
             self.kill()
             self.trigger_death_particles(self.rect.center,self.monster_name)
+            self.add_exp(self.exp)
 
     def hit_reaction(self): # ---------> COULD BE ON ENTITIES or GRASSES?
         if not self.vulnerable:

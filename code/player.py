@@ -48,10 +48,12 @@ class Player(Entity):
 
         # stats
         self.stats = STATS
+        self.max_stats = MAX_STATS
+        self.upgrade_cost = UPGRADE_COST
         self.health = self.stats[HEALTH] * 0.5
         self.energy = self.stats[ENERGY] * 0.8
         self.speed = self.stats[SPEED]
-        self.exp = 0
+        self.exp = 500
         self.energy_fill_speed = 0.01
         self.dm_energy_speed = 0.09
         self.health_fill_speed = 0.01
@@ -235,6 +237,13 @@ class Player(Entity):
             self.energy += (self.energy_fill_speed + self.dm_energy_speed) * self.stats[MAGIC]
         else:
             self.energy = self.stats[ENERGY]
+
+    def get_value_by_index(self,index):
+        return list(self.stats.values())[index]
+
+    def get_cost_by_index(self,index):
+        return list(self.upgrade_cost.values())[index]
+
 
     def update(self):
         self.input()
