@@ -9,7 +9,7 @@ class Player(Entity):
         super().__init__(groups)
         self.image = pygame.image.load(TEST_PLAYER).convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
-        self.hitbox = self.rect.inflate(0,-26)
+        self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET['player'])
         self.character_form = 0
 
         # graphics setup
@@ -64,6 +64,10 @@ class Player(Entity):
         self.invulnerability_duration = 500
         self.dm_invulnerability = 4500 # just to easier the tests
 
+        # import sound
+        self.weapon_attack_sound = pygame.mixer.Sound(WEAPON_ATTACK_SOUND_FOLDER)
+        self.weapon_attack_sound.set_volume(WEAPON_ATTACK_SOUND_VOLUME)
+
     def import_player_assets(self):
         self.animations = CHARACTER_ANIMATIONS
         for animation in self.animations.keys():
@@ -99,6 +103,7 @@ class Player(Entity):
                 self.attacking = True
                 self.attack_time = pygame.time.get_ticks()
                 self.create_attack()
+                self.weapon_attack_sound.play()
             
             # Magic input
             if keys[pygame.K_LCTRL]:
