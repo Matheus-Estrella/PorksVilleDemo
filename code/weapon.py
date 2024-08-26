@@ -10,7 +10,7 @@ class Weapon(pygame.sprite.Sprite):
 
 
         # graphic
-        full_path = pathlib.Path(f'graphics/weapons/{player.weapon}/{direction}.png').resolve()
+        full_path = pathlib.Path(f'graphics/weapons/{player.weapon}/{direction}.png')
         self.image = pygame.image.load(full_path).convert_alpha()
 
         # placement

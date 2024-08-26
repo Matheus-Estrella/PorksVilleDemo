@@ -5,39 +5,40 @@ from random import choice
 
 class AnimationPlayer:
     def __init__(self):
+        print("particlesFolder -> " + PARTICLES_FOLDER)
         self.frames = {
             # magic
-            MAGIC_1: import_folder(f'{PARTICLES_FOLDER}flame/frames'),
-            'aura': import_folder(f'{PARTICLES_FOLDER}aura'),
-            MAGIC_2: import_folder(f'{PARTICLES_FOLDER}heal/frames'),
+            MAGIC_1: import_folder(f'{PARTICLES_FOLDER}/flame/frames'),
+            'aura': import_folder(f'{PARTICLES_FOLDER}/aura'),
+            MAGIC_2: import_folder(f'{PARTICLES_FOLDER}/heal/frames'),
             
             # attacks 
-            'claw': import_folder(f'{PARTICLES_FOLDER}claw'),
-            'slash': import_folder(f'{PARTICLES_FOLDER}slash'),
-            'sparkle': import_folder(f'{PARTICLES_FOLDER}sparkle'),
-            'leaf_attack': import_folder(f'{PARTICLES_FOLDER}leaf_attack'),
-            'thunder': import_folder(f'{PARTICLES_FOLDER}thunder'),
+            'claw': import_folder(f'{PARTICLES_FOLDER}/claw'),
+            'slash': import_folder(f'{PARTICLES_FOLDER}/slash'),
+            'sparkle': import_folder(f'{PARTICLES_FOLDER}/sparkle'),
+            'leaf_attack': import_folder(f'{PARTICLES_FOLDER}/leaf_attack'),
+            'thunder': import_folder(f'{PARTICLES_FOLDER}/thunder'),
 
             # monster deaths
-            MONSTER_1_NAME: import_folder(f'{PARTICLES_FOLDER}smoke_orange'),
-            MONSTER_2_NAME: import_folder(f'{PARTICLES_FOLDER}raccoon'),
-            MONSTER_3_NAME: import_folder(f'{PARTICLES_FOLDER}nova'),
-            MONSTER_4_NAME: import_folder(f'{PARTICLES_FOLDER}bamboo'),
+            MONSTER_1_NAME: import_folder(f'{PARTICLES_FOLDER}/smoke_orange'),
+            MONSTER_2_NAME: import_folder(f'{PARTICLES_FOLDER}/raccoon'),
+            MONSTER_3_NAME: import_folder(f'{PARTICLES_FOLDER}/nova'),
+            MONSTER_4_NAME: import_folder(f'{PARTICLES_FOLDER}/bamboo'),
             
             # fading leafs 
             LEAF: (
-                import_folder(f'{PARTICLES_FOLDER}leaf1'),
-                import_folder(f'{PARTICLES_FOLDER}leaf2'),
-                import_folder(f'{PARTICLES_FOLDER}leaf3'),
-                import_folder(f'{PARTICLES_FOLDER}leaf4'),
-                import_folder(f'{PARTICLES_FOLDER}leaf5'),
-                import_folder(f'{PARTICLES_FOLDER}leaf6'),
-                self.reflect_images(import_folder(f'{PARTICLES_FOLDER}leaf1')),
-                self.reflect_images(import_folder(f'{PARTICLES_FOLDER}leaf2')),
-                self.reflect_images(import_folder(f'{PARTICLES_FOLDER}leaf3')),
-                self.reflect_images(import_folder(f'{PARTICLES_FOLDER}leaf4')),
-                self.reflect_images(import_folder(f'{PARTICLES_FOLDER}leaf5')),
-                self.reflect_images(import_folder(f'{PARTICLES_FOLDER}leaf6'))
+                import_folder(f'{PARTICLES_FOLDER}/leaf1'),
+                import_folder(f'{PARTICLES_FOLDER}/leaf2'),
+                import_folder(f'{PARTICLES_FOLDER}/leaf3'),
+                import_folder(f'{PARTICLES_FOLDER}/leaf4'),
+                import_folder(f'{PARTICLES_FOLDER}/leaf5'),
+                import_folder(f'{PARTICLES_FOLDER}/leaf6'),
+                self.reflect_images(import_folder(f'{PARTICLES_FOLDER}/leaf1')),
+                self.reflect_images(import_folder(f'{PARTICLES_FOLDER}/leaf2')),
+                self.reflect_images(import_folder(f'{PARTICLES_FOLDER}/leaf3')),
+                self.reflect_images(import_folder(f'{PARTICLES_FOLDER}/leaf4')),
+                self.reflect_images(import_folder(f'{PARTICLES_FOLDER}/leaf5')),
+                self.reflect_images(import_folder(f'{PARTICLES_FOLDER}/leaf6'))
             )
         }
 

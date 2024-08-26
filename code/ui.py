@@ -13,7 +13,7 @@ class UI:
         self.energy_bar_rect = pygame.Rect(10,34,ENERGY_BAR_WIDTH,BAR_HEIGHT)
 
         # convert weapon dictionary
-        self.weapon_graphics = []
+        self.weapon_graphics =[]
         for weapon in WEAPON_DATA.values():
             path = weapon[GRAPHIC]
             weapon = pygame.image.load(path).convert_alpha()

@@ -71,7 +71,7 @@ class Player(Entity):
     def import_player_assets(self):
         self.animations = CHARACTER_ANIMATIONS
         for animation in self.animations.keys():
-            full_path = CHARACTER_FOLDER.joinpath(animation)
+            full_path = CHARACTER_FOLDER + '/' + animation
             self.animations[animation] = import_folder(full_path)
 
     # movement
