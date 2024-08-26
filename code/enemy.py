@@ -56,7 +56,8 @@ class Enemy(Entity):
 
     def import_graphics(self,name):
         self.animations = {'idle':[],'move':[],'attack':[]}
-        main_path = f'{MONSTER_FOLDER}{name}/'
+        main_path = f'{MONSTER_FOLDER}/{name}/'
+
         for animation in self.animations.keys():
             self.animations[animation] = import_folder(main_path + animation)
 
