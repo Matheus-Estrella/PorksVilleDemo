@@ -1,12 +1,42 @@
 import pathlib
+
+# 
+
+MAIN_SOUND_FOLDER = pathlib.Path('audio/main.ogg').resolve()
+MAIN_SOUND_VOLUME = 0.75
+
 # -------------------------------------------------------------------------------------------------------
 
+# Pattern Names for variables
+OBJECT_2Y = 'object'
+OBJECT_2Y_FOLDER = 'objects'
+
+GRASS_REGULAR = 'grass'
+GRASS_REGULAR_FOLDER = 'grass'
+
+ENTITIES = 'entities'
+BOUNDARY = 'boundary'
+INVISIBLE = 'invisible'
+ENEMY = 'enemy'
+SPRITE_TYPE = 'sprite_type'
+WEAPON = 'weapon'
+
+GRAPHIC = 'graphic'
+GRAPHIC_FOLDER = 'graphics'
+
+# -------------------------------------------------------------------------------------------------------
 # Screen Settings
 
 WIDTH = 1280
 HEIGHT = 720
 FPS = 60
 TILESIZE = 64
+HITBOX_OFFSET = {
+    'player': -26,
+    OBJECT_2Y: -40,
+    GRASS_REGULAR : -10,
+    'invisible' : 0
+}
 
 # Message Boxes colors
 BACK_COLOR = 'black'
@@ -19,9 +49,6 @@ PLAYER_ID = '394'
 
 # -------------------------------------------------------------------------------------------------------
 
-# Pattern Names for variables
-OBJECT_2Y = 'object'
-OBJECT_2Y_FOLDER = 'objects'
 
 GRASS_REGULAR = 'grass'
 GRASS_REGULAR_FOLDER = 'grass'
@@ -69,6 +96,9 @@ WEAPON_3 = 'axe'
 WEAPON_4 = 'rapier'
 WEAPON_5 = 'sai'
 
+WEAPON_ATTACK_SOUND_FOLDER = '../audio/sword.wav'
+WEAPON_ATTACK_SOUND_VOLUME = 0.15
+
 WEAPON_DATA = {
     WEAPON_1 : {'cooldown':100,'damage':15,GRAPHIC: pathlib.Path(f'{GRAPHIC_FOLDER}/weapons/{WEAPON_1}/full.png').resolve()},
     WEAPON_2 : {'cooldown':100,'damage':15,GRAPHIC: pathlib.Path(f'{GRAPHIC_FOLDER}/weapons/{WEAPON_2}/full.png').resolve()},
@@ -80,10 +110,16 @@ WEAPON_DATA = {
 # -------------------------------------------------------------------------------------------------------
 
 # magics
+
 MAGIC_1 = 'flame'
 MAGIC_1_PARTICLE = 'fire'
+MAGIC_1_SOUND_FOLDER = '../audio/Fire.wav'
+MAGIC_1_SOUND_VOLUME = 0.3
+
 MAGIC_2 = 'heal'
 MAGIC_2_PARTICLE = 'heal'
+MAGIC_2_SOUND_FOLDER = '../audio/heal.wav'
+MAGIC_2_SOUND_VOLUME = 0.3
 
 MAGIC_DATA = {
     MAGIC_1 : {'strength':100,'cost':15,GRAPHIC: pathlib.Path(f'{GRAPHIC_FOLDER}/particles/{MAGIC_1}/{MAGIC_1_PARTICLE}.png').resolve()},
@@ -99,6 +135,10 @@ SPEED = 'speed'
 MAGIC = 'magic'
 
 STATS = {HEALTH:100,ENERGY:60,'attack':10,MAGIC:4,SPEED:5}
+
+UPGRADE_COST = {HEALTH:100,ENERGY:100,'attack':100,MAGIC:100,SPEED:100}
+
+MAX_STATS = {HEALTH:300,ENERGY:140,'attack':20,MAGIC:10,SPEED:10}
 
 # UI
 BAR_HEIGHT = 20
@@ -120,6 +160,12 @@ HEALTH_COLOR = 'red'
 ENERGY_COLOR = 'blue'
 UI_BORDER_COLOR_ACTIVE = 'gold'
 
+# upgrade menu
+TEXT_COLOR_SELECTED = '#111111'
+BAR_COLOR = '#EEEEEE'
+BAR_COLOR_SELECTED = '#111111'
+UPGRADE_BG_COLOR_SELECTED = '#EEEEEE'
+
 # item box
 PADDING = 3
 ITEM_BOX_POS_Y = 630
@@ -136,6 +182,12 @@ ATTACK_TYPE = 'attack_type' # for animations of the attack
 RESISTANCE = 'resistance' # if the player hits enemy, make a pushback
 ATTACK_RADIUS = 'attack_radius' # attacking area to attack player
 NOTICE_RADIUS = 'notice_radius' # chasing area to attack player
+
+DEATH_SOUND = '../audio/death.wav'
+DEATH_SOUND_VOLUME = 0.2
+HIT_SOUND = '../audio/hit.wav'
+HIT_SOUND_VOLUME = 0.2
+MONSTER_ATTACK_SOUND_VOLUME = 0.25
 
 MONSTER_1_NAME = 'squid'
 MONSTER_1_ID = '393'
@@ -154,3 +206,15 @@ MONSTER_DATA = {
 }
 
 monster_data = MONSTER_DATA
+
+# -------------------------------------------------------------------------------------------------------
+
+# Particles
+# some hardcodeds datas was kept in particles code to easier the process. For implementationa, try to transport
+# this data on this section
+PARTICLES_FOLDER = f'../{GRAPHIC_FOLDER}/particles/'
+
+LEAF = 'leaf'
+
+# -------------------------------------------------------------------------------------------------------
+
