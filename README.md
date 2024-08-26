@@ -1,11 +1,13 @@
 # Porksville - Demo
 
-### Project for participation in the Araraquara University Career Fair
+### Project iniciative by João Romão and Matheus Estrella
 
 
 
 ## Main Character
 
 This is the brave hero to be developed in the game.
+
+![Main Character](./conception_arts/buriti_down.png)
 
 
