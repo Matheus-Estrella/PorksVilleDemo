@@ -10,6 +10,7 @@ from ui import UI
 from enemy import Enemy
 from particles import AnimationPlayer
 from magics import MagicPlayer
+from upgrade import Upgrade
 
 class Level:
     def __init__(self):
@@ -18,6 +19,7 @@ class Level:
 
         #get the display surface
         self.display_surface = pygame.display.get_surface()
+        self.game_paused = False
 
         #sprite group setup
         self.visible_sprites = YSortCameraGroup(self.level_number)
@@ -33,6 +35,7 @@ class Level:
 
         #user interface
         self.ui = UI()
+        self.upgrade = Upgrade(self.player)
 
         # particles
         self.animation_player = AnimationPlayer()
@@ -87,7 +90,8 @@ class Level:
                                       [self.visible_sprites, self.attackable_sprites],
                                       self.obstacles_sprites,
                                       self.damage_player,
-                                      self.trigger_death_particles)            
+                                      self.trigger_death_particles,
+                                      self.add_exp)            
 
     def create_attack(self):
         self.current_attack = Weapon(self.player,[self.visible_sprites,self.attack_sprites])
@@ -137,16 +141,31 @@ class Level:
         self.animation_player.create_particles(particle_type,pos,self.visible_sprites)
         pass
 
+    def add_exp(self,amount):
+        self.player.exp += amount
+
+    def toggle_menu(self):
+        self.game_paused = not self.game_paused
+        pass
+
     def run(self):
-        #update and draw the game
+        
         self.visible_sprites.custom_draw(self.player)
-        self.visible_sprites.update()
-        self.visible_sprites.enemy_update(self.player)
-        self.player_attack_logic()
         self.ui.display(self.player)
-        #Debug(self.player.direction) # enables direction print on screen
-        #Debug(self.player.status) # enables status print on screen
-        #Debug(self.player.weapon) 
+        
+        if self.game_paused:
+            # display upgrade menu
+            self.upgrade.display()
+            pass
+        else:
+            #run the game
+            #update and draw the game
+            self.visible_sprites.update()
+            self.visible_sprites.enemy_update(self.player)
+            self.player_attack_logic()
+            #Debug(self.player.direction) # enables direction print on screen
+            #Debug(self.player.status) # enables status print on screen
+            #Debug(self.player.weapon) 
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self, level_number):

@@ -9,7 +9,7 @@ class Player(Entity):
         super().__init__(groups)
         self.image = pygame.image.load(TEST_PLAYER).convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
-        self.hitbox = self.rect.inflate(0,-26)
+        self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET['player'])
         self.character_form = 0
 
         # graphics setup
@@ -48,10 +48,12 @@ class Player(Entity):
 
         # stats
         self.stats = STATS
+        self.max_stats = MAX_STATS
+        self.upgrade_cost = UPGRADE_COST
         self.health = self.stats[HEALTH] * 0.5
         self.energy = self.stats[ENERGY] * 0.8
         self.speed = self.stats[SPEED]
-        self.exp = 0
+        self.exp = 500
         self.energy_fill_speed = 0.01
         self.dm_energy_speed = 0.09
         self.health_fill_speed = 0.01
@@ -61,6 +63,10 @@ class Player(Entity):
         self.hurt_time = None
         self.invulnerability_duration = 500
         self.dm_invulnerability = 4500 # just to easier the tests
+
+        # import sound
+        self.weapon_attack_sound = pygame.mixer.Sound(WEAPON_ATTACK_SOUND_FOLDER)
+        self.weapon_attack_sound.set_volume(WEAPON_ATTACK_SOUND_VOLUME)
 
     def import_player_assets(self):
         self.animations = CHARACTER_ANIMATIONS
@@ -97,6 +103,7 @@ class Player(Entity):
                 self.attacking = True
                 self.attack_time = pygame.time.get_ticks()
                 self.create_attack()
+                self.weapon_attack_sound.play()
             
             # Magic input
             if keys[pygame.K_LCTRL]:
@@ -235,6 +242,13 @@ class Player(Entity):
             self.energy += (self.energy_fill_speed + self.dm_energy_speed) * self.stats[MAGIC]
         else:
             self.energy = self.stats[ENERGY]
+
+    def get_value_by_index(self,index):
+        return list(self.stats.values())[index]
+
+    def get_cost_by_index(self,index):
+        return list(self.upgrade_cost.values())[index]
+
 
     def update(self):
         self.input()
