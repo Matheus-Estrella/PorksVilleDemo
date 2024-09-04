@@ -13,13 +13,22 @@ class Game:
         self.clock = pygame.time.Clock()
         self.level = Level()
 
+        #sound
+        main_sound = pygame.mixer.Sound(MAIN_SOUND_FOLDER)
+        main_sound.set_volume(MAIN_SOUND_VOLUME)
+        main_sound.play(loops = -1)
+
     def run(self):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            self.screen.fill(BACK_COLOR)
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_m:
+                        self.level.toggle_menu()
+
+            self.screen.fill(WATER_COLOR)
             #Debug("Welcome to PorksVille")
             self.level.run()
             pygame.display.update()
