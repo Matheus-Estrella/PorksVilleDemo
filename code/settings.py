@@ -31,10 +31,10 @@ HEIGHT = 720
 FPS = 60
 TILESIZE = 64
 HITBOX_OFFSET = {
-    'player': -26,
-    OBJECT_2Y: -40,
-    GRASS_REGULAR : -10,
-    'invisible' : 0
+    'player': [-6,-26],
+    OBJECT_2Y: [0,-40],
+    GRASS_REGULAR : [0,-10],
+    'invisible' : [0,0]
 }
 
 # Message Boxes colors
@@ -45,6 +45,7 @@ TEXT_COLOR = 'white'
 
 # Pattern IDs for objects tiles (on Tiled)
 PLAYER_ID = '394'
+PLAYER = 'player'
 
 # -------------------------------------------------------------------------------------------------------
 

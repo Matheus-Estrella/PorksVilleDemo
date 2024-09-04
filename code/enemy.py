@@ -7,18 +7,15 @@ class Enemy(Entity):
     def __init__(self,monster_name,pos,groups,obstacle_sprites,damage_player,trigger_death_particles,add_exp):
     
         #general setup
-        super().__init__(groups)
-        self.sprite_type = 'enemy'
+        super().__init__(groups,ENEMY,pos,obstacle_sprites)
         
         # graphics setup
         self.import_graphics(monster_name)
-        self.status ='idle'
         self.image = self.animations[self.status][self.frame_index]
 
         # movement
         self.rect = self.image.get_rect(topleft = pos)
         self.hitbox = self.rect.inflate(0,-10)
-        self.obstacle_sprites = obstacle_sprites
 
         # stats
         self.monster_name = monster_name
@@ -26,7 +23,7 @@ class Enemy(Entity):
         self.health = monster_info[HEALTH]
         self.exp = monster_info['exp']
         self.speed = monster_info[SPEED]
-        self.attack_damage = monster_info['damage']
+        self.attack = monster_info['damage']
         self.resistance = monster_info[RESISTANCE]
         self.attack_radius = monster_info[ATTACK_RADIUS]
         self.notice_radius = monster_info[NOTICE_RADIUS]
@@ -34,7 +31,7 @@ class Enemy(Entity):
 
         # player interaction
         self.add_exp = add_exp
-        self.can_attack = True
+        self.attacking = True
         self.attack_time = None
         self.attack_cooldown = 400
         self.damage_player = damage_player
@@ -42,8 +39,8 @@ class Enemy(Entity):
 
         # invincibility timer  # ---------> COULD BE ON ENTITIES?
         self.vulnerable = True
-        self.hit_time = None
-        self.invincibility_duration = 300
+        self.hurt_time = None
+        self.invulnerability_duration = 300
 
         # sounds
         self.death_sound = pygame.mixer.Sound(DEATH_SOUND)
@@ -76,7 +73,7 @@ class Enemy(Entity):
         distance = self.get_player_distance_direction(player)[0]
 
         # setting the animation status for enemy response
-        if distance <= self.attack_radius and self.can_attack:
+        if distance <= self.attack_radius and self.attacking:
             if self.status != 'attack':
                 self.frame_index = 0
             self.status = 'attack'
@@ -88,7 +85,7 @@ class Enemy(Entity):
     def actions(self,player):
         if self.status == 'attack':
             self.attack_time = pygame.time.get_ticks()
-            self.damage_player(self.attack_damage,self.attack_type)
+            self.damage_player(self.attack,self.attack_type)
             self.attack_sound.play()
         elif self.status == 'move':
             self.direction = self.get_player_distance_direction(player)[1]
@@ -101,7 +98,7 @@ class Enemy(Entity):
         self.frame_index += self.animation_speed
         if self.frame_index >= len(animation):
             if self.status == 'attack':
-                self.can_attack = False
+                self.attacking = False
             self.frame_index = 0
 
         self.image = animation[int(self.frame_index)]
@@ -115,11 +112,11 @@ class Enemy(Entity):
     
     def cooldown(self):
         current_time = pygame.time.get_ticks()
-        if not self.can_attack:
+        if not self.attacking:
             if current_time - self.attack_time >= self.attack_cooldown:
-                self.can_attack = True
+                self.attacking = True
         if not self.vulnerable:
-            if current_time - self.hit_time >= self.invincibility_duration:
+            if current_time - self.hurt_time >= self.invulnerability_duration:
                 self.vulnerable = True
 
     def get_damage(self,player,attack_type):
@@ -131,7 +128,7 @@ class Enemy(Entity):
             else:
                 self.health -= player.get_full_magic_damage()
                 #magic damage -- > For anothers spells attack, change here
-            self.hit_time = pygame.time.get_ticks()
+            self.hurt_time = pygame.time.get_ticks()
             self.vulnerable = False
         
     def check_death(self): # ---------> COULD BE ON ENTITIES?

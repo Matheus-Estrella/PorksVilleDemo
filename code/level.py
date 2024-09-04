@@ -177,6 +177,8 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.offset = pygame.math.Vector2()
 
         # creating the floor
+        print(GROUNDIMAGE[level_number])    #CHECKING THE GROUNDIMAGE ERROR
+        #self.floor_surface = pygame.image.load(os.path.join(os.path.dirname(__file__),GROUNDIMAGE[level_number])).convert()
         self.floor_surface = pygame.image.load(GROUNDIMAGE[level_number]).convert()
         self.floor_rect = self.floor_surface.get_rect(topleft=(0, 0))
 

@@ -1,12 +1,26 @@
 import pygame
 from math import sin
+from settings import PLAYER,ENEMY
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self,groups):
+    def __init__(self,groups,sprite_type,pos,obstacle_sprites):
         super().__init__(groups)
+        self.sprite_type = sprite_type
         self.frame_index = 0
         self.animation_speed = 0.15
         self.direction = pygame.math.Vector2()
+
+        #graphics setup
+        self.status = self.set_attributes()['status']
+
+        # movement
+        self.obstacle_sprites = obstacle_sprites
+
+    def set_attributes(self):
+        if self.sprite_type == PLAYER:
+            return {'status':'down'}
+        elif self.sprite_type == ENEMY:
+            return {'status':'idle'}
         
     def move(self,speed):
         if self.direction.magnitude() != 0:

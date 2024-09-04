@@ -6,15 +6,14 @@ from entity import Entity
 
 class Player(Entity):
     def __init__(self,pos,groups,obstacle_sprites, create_attack, destoy_attack,create_magic):
-        super().__init__(groups)
+        super().__init__(groups,PLAYER,pos,obstacle_sprites)
         self.image = pygame.image.load(TEST_PLAYER).convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
-        self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET['player'])
+        self.hitbox = self.rect.inflate(HITBOX_OFFSET['player'][0],HITBOX_OFFSET['player'][1])
         self.character_form = 0
 
         # graphics setup
         self.import_player_assets()
-        self.status = 'down'
 
         # movement
         self.attacking = False
@@ -25,7 +24,6 @@ class Player(Entity):
         self.transforming = False
         self.grabbing = False
 
-        self.obstacle_sprites = obstacle_sprites
 
         # cooldown
         self.switch_duration_cooldown = 200
@@ -248,7 +246,6 @@ class Player(Entity):
 
     def get_cost_by_index(self,index):
         return list(self.upgrade_cost.values())[index]
-
 
     def update(self):
         self.input()
