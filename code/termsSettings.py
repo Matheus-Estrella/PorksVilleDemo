@@ -4,7 +4,7 @@ ENEMY = 'enemy'
 NPC = 'npc'
 
 # interactions types
-NON_INTERACTION = 'non_interaction'
+INTERACTION = ['non_interaction']
 
 # Scenario Terms
 BACKGROUND = 'background'

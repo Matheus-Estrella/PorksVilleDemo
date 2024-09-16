@@ -29,20 +29,22 @@ class MagicPlayer:
             self.sounds[MAGIC_LIST[str(0)]['magic_name']].play()
             player.energy -= cost
             attack_direction = player.status.split('_')[0]
-        if attack_direction == 'right': direction = pygame.math.Vector2(1,0)
-        elif attack_direction == 'left': direction = pygame.math.Vector2(-1,0)
-        elif attack_direction == 'up': direction = pygame.math.Vector2(0,-1)
-        else: direction = pygame.math.Vector2(0,1)
 
-        for i in range(1,6):
-            rand_dist = TILESIZE//3
-            if direction.x: #horizontal
-                offset_x = (direction.x * i) * TILESIZE
-                x = player.rect.centerx + offset_x + randint(-rand_dist,rand_dist)
-                y = player.rect.centery + randint(-rand_dist,rand_dist)
-                self.animation_player.create_particles(MAGIC_LIST[str(0)]['magic_name'],(x,y),groups)
-            else: #vertical
-                offset_y = (direction.y * i) * TILESIZE
-                x = player.rect.centerx + randint(-rand_dist,rand_dist)
-                y = player.rect.centery + offset_y + randint(-rand_dist,rand_dist)
-                self.animation_player.create_particles(MAGIC_LIST[str(0)]['magic_name'],(x,y),groups)
+            if attack_direction == 'right': direction = pygame.math.Vector2(1,0)
+            elif attack_direction == 'left': direction = pygame.math.Vector2(-1,0)
+            elif attack_direction == 'up': direction = pygame.math.Vector2(0,-1)
+            else: direction = pygame.math.Vector2(0,1)
+
+            for i in range(1,6):
+                rand_dist = TILESIZE//3
+                
+                if direction.x: #horizontal
+                    offset_x = (direction.x * i) * TILESIZE
+                    x = player.rect.centerx + offset_x + randint(-rand_dist,rand_dist)
+                    y = player.rect.centery + randint(-rand_dist,rand_dist)
+                    self.animation_player.create_particles(MAGIC_LIST[str(0)]['magic_name'],(x,y),groups)
+                else: #vertical
+                    offset_y = (direction.y * i) * TILESIZE
+                    x = player.rect.centerx + randint(-rand_dist,rand_dist)
+                    y = player.rect.centery + offset_y + randint(-rand_dist,rand_dist)
+                    self.animation_player.create_particles(MAGIC_LIST[str(0)]['magic_name'],(x,y),groups)

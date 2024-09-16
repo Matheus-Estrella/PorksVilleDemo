@@ -14,10 +14,10 @@ class Enemy(Entity):
         self.import_graphics(monster_name)
         self.status ='idle'
         self.image = self.animations[self.status][self.frame_index]
-
-        # movement
         self.rect = self.image.get_rect(topleft = pos)
         self.hitbox = self.rect.inflate(0,-10)
+
+        # obstacle settings
         self.obstacle_sprites = obstacle_sprites
 
         # stats
@@ -32,18 +32,21 @@ class Enemy(Entity):
         self.notice_radius = monster_info['notice_radius']
         self.attack_type = monster_info['attack_type']
 
-        # player interaction
-        self.add_exp = add_exp
+        # attacking
+        
         self.can_attack = True
         self.attack_time = None
         self.attack_cooldown = 400
+
+        # player interaction
+        self.add_exp = add_exp
         self.damage_player = damage_player
         self.trigger_death_particles = trigger_death_particles
 
         # invincibility timer  # ---------> COULD BE ON ENTITIES?
         self.vulnerable = True
-        self.hit_time = None
-        self.invincibility_duration = 300
+        self.hurt_time = None
+        self.invulnerability_duration = 300
 
         # sounds
         self.death_sound = pygame.mixer.Sound(MONSTER_SETTINGS['death_sound'])
@@ -119,7 +122,7 @@ class Enemy(Entity):
             if current_time - self.attack_time >= self.attack_cooldown:
                 self.can_attack = True
         if not self.vulnerable:
-            if current_time - self.hit_time >= self.invincibility_duration:
+            if current_time - self.hurt_time >= self.invulnerability_duration:
                 self.vulnerable = True
 
     def get_damage(self,player,attack_type):
@@ -131,7 +134,7 @@ class Enemy(Entity):
             else:
                 self.health -= player.get_full_magic_damage()
                 #magic damage -- > For anothers spells attack, change here
-            self.hit_time = pygame.time.get_ticks()
+            self.hurt_time = pygame.time.get_ticks()
             self.vulnerable = False
         
     def check_death(self): # ---------> COULD BE ON ENTITIES?

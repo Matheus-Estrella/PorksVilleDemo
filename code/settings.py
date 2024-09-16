@@ -112,7 +112,7 @@ WEAPONS_LIST = {
 
 # for further implementations of interactible objects to check ist interaction type
 INTERACTIONS_MAPPING = {
-    0:{'id':'-1','name':'boundary','interaction_type':NON_INTERACTION}
+    0:{'id':'-1','name':'boundary','interaction_type':INTERACTION[0]}
 }
 
 # -------------------------------------------------| ENEMIES AND NPCS SETTINGS |-------------------------------------------------
@@ -164,9 +164,8 @@ COLORS_SETTINGS = {
     'text_color_selected' : '#111111',
     'bar_color' : '#EEEEEE',
     'bar_color_selected' : '#111111',
-    'upgrade_bg_color_selected' : '#EEEEEE',
     'water_color' : '#71ddee',
-    # ui colors
+    # stats colors
     'health_color' : 'red',
     'energy_color' : 'blue',
 }
@@ -182,9 +181,34 @@ UI_SETTINGS = {
     'ui_bg_color' : '#222222',
     'ui_border_color' : '#111111',
     'ui_border_color_active' : 'gold',
+    'upgrade_bg_color_selected' : '#EEEEEE',
     # item box positions
     'item_box_size' : 80,
     'padding' : 3,
     'box_pos_y' : 630,
     'box_pos_x' : 10,
 }
+
+
+
+
+
+EASTER_EGG = '''                                                                                                      
+      :--::::--:                    :-------:       
+      -:::::::::--                -:::::::::-       
+      -:::::::::::-   :::::::   ::::::::::::-       
+       -::::::::---:::::::::::::---::::::::-        
+        -::::--:::::::::::::::::::::--::::-         
+         :---:::::::::::::::::::::::::---:          
+          -:::::::::::::::::::::::::::::-           
+         =:::::::::::::::::::::::::::::::-          
+        -:::::::::::::::::::::::::::::::::-         
+        -:::::::::::::::---:::::::::::::::=         
+       :::::::::-:::----:::---::::-::::::::-        
+       :::::::=@*+:--::-::::::---%#+-::::::-        
+        -:::::-##*:=:-=%+:=%=::=:#%#-::::::-        
+        -::::::::::=::-#=:=#-::=::::::::::-         
+         -::::::::::=:::::::::=::::::::::-:         
+          -:::::::::::--==---:::::::::::=           
+           :-:::::::::::::::::::::::::=:            
+              :::::---:::::-----:::::    '''
