@@ -14,9 +14,10 @@ class Player(Entity):
 
         # graphics setup
         self.transforming = False
-        self.character_form = 0
+        self.character_form = '0'
+        self.animations = {}
 
-        self.image = pygame.image.load(CHARACTER_IMAGES['0']['image']).convert_alpha()
+        self.image = pygame.image.load(CHARACTER_IMAGES['image']).convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
         self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET[PLAYER])
 
@@ -66,12 +67,15 @@ class Player(Entity):
         # import sound
         self.weapon_attack_sound = pygame.mixer.Sound(GAME_SOUNDS['weapon']['path'])
         self.weapon_attack_sound.set_volume(GAME_SOUNDS['weapon']['volume'])
+        
+    def change_character_form(self, form_version):
+        self.character_form = form_version  # '0', '1', etc.
+        self.import_player_assets()
 
     def import_player_assets(self):
-        self.animations = CHARACTER_ANIMATIONS
-        for animation in self.animations.keys():
-            full_path = CHARACTER_IMAGES[str(self.character_form)]['folder'] + animation
-            self.animations[animation] = import_folder(full_path)
+        # add puffing particles
+        character_folder = f'../graphics/player/{self.character_form}/'
+        self.animations = {animat: import_folder(character_folder + animat) for animat in CHARACTER_ANIMATIONS}
 
     # movement
     def input(self):

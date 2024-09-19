@@ -20,7 +20,7 @@ HITBOX_OFFSET = {
 GENERAL_SOUND_ADJUST = 0.1
 GAME_SOUNDS = {
     'main' : {'path':'../audio/main.ogg','volume':0.75*GENERAL_SOUND_ADJUST},
-    'weapon':{'path':'../audio/sword.wav','volume':0.8*GENERAL_SOUND_ADJUST}
+    'weapon':{'path':'../audio/sword.wav','volume':0.25*GENERAL_SOUND_ADJUST}
 }
 
 # -------------------------------------------------| MAPPING IMAGES |-------------------------------------------------
@@ -53,15 +53,11 @@ LEVEL_IMAGES = { # 'level' : {level images}
 
 # character images
 
-CHARACTER_IMAGES = { # 'character form' : {character image and folder}
-    '0':{'image':'../graphics/test/player.png','folder':'../graphics/player/'},
-    }
+CHARACTER_IMAGES = {'image':'../graphics/test/rock.png','folder':'../graphics/player/'}
 
-CHARACTER_ANIMATIONS = {
-            'up':[],'down':[],'left':[],'right':[],
-            'up_idle':[],'down_idle':[],'left_idle':[],'right_idle':[],
-            'up_attack':[],'down_attack':[],'left_attack':[],'right_attack':[]
-        }
+CHARACTER_ANIMATIONS = ['up', 'down', 'left', 'right', 
+                        'up_idle', 'down_idle', 'left_idle', 'right_idle',
+                        'up_attack', 'down_attack', 'left_attack', 'right_attack']
 
 CHARACTER_DATA = {
     'stats':{'health':100,'energy':60,'attack':10,'magic':4,'resistance':1,'speed':5},
@@ -121,10 +117,10 @@ INTERACTIONS_MAPPING = {
 
 MONSTER_SETTINGS = {'folder':'../graphics/monsters/',
                     'hit_sound':'../audio/hit.wav',
-                    'hit_sound_volume':0.2*GENERAL_SOUND_ADJUST,
-                    'monster_attack_sound_volume': 0.25*GENERAL_SOUND_ADJUST,
+                    'hit_sound_volume':0.35*GENERAL_SOUND_ADJUST,
+                    'monster_attack_sound_volume': 0.30*GENERAL_SOUND_ADJUST,
                     'death_sound':'../audio/death.wav',
-                    'death_sound_volume':0.25*GENERAL_SOUND_ADJUST}
+                    'death_sound_volume':0.30*GENERAL_SOUND_ADJUST}
 
 ENTITY_MAPPING = {
     0:{'id':'394','name':'player','entity_type':PLAYER,'dying_folder':'../graphics/particles/smoke_orange'},
