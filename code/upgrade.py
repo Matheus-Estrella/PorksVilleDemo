@@ -1,5 +1,4 @@
 import pygame
-#from settings import *
 from settings import UI_SETTINGS,COLORS_SETTINGS
 
 class Upgrade:

@@ -64,9 +64,9 @@ CHARACTER_ANIMATIONS = {
         }
 
 CHARACTER_DATA = {
-    'stats':{'health':100,'energy':60,'attack':10,'magic':4,'speed':5},
-    'max_stats':{'health':300,'energy':140,'attack':20,'magic':10,'speed':10},
-    'upgrade_cost':{'health':100,'energy':100,'attack':100,'magic':100,'speed':100},
+    'stats':{'health':100,'energy':60,'attack':10,'magic':4,'resistance':1,'speed':5},
+    'max_stats':{'health':300,'energy':140,'attack':20,'magic':10,'resistance':10,'speed':10},
+    'upgrade_cost':{'health':100,'energy':100,'attack':100,'magic':100,'resistance':100,'speed':100},
 }
 
 # -------------------------------------------------| ATTACKS SETTINGS |-------------------------------------------------
@@ -77,8 +77,9 @@ MAGIC_LIST = {
     '0':{'magic_name':'flame',
          'sub_magic_name':None,
          'magic_particle':'fire',
-         'strength':100,
+         'strength':75,
          'cost':15,
+         'attack_amount':6,
          'graphic':'../graphics/particles/flame/fire.png',
          'graphic_folder':'../graphics/particles/flame/frames',
          'sub_graphic_folder':None,
@@ -88,8 +89,9 @@ MAGIC_LIST = {
     '1':{'magic_name':'heal',
          'sub_magic_name':'aura',
          'magic_particle':'heal',
-         'strength':100,
-         'cost':15,
+         'strength':10,
+         'cost':5,
+         'attack_amount':1,
          'graphic':'../graphics/particles/heal/heal.png',
          'graphic_folder':'../graphics/particles/heal/frames',
          'sub_graphic_folder':'../graphics/particles/aura',
@@ -150,10 +152,10 @@ ATTACK_PARTICLES = {
 }
 
 MONSTER_DATA = {
-	ENTITY_MAPPING[1]['name']: {'health': 100,'exp':100,'damage':20,'attack_type': ATTACK_TYPE[0], 'attack_sound':ATTACK_SOUND[ATTACK_TYPE[0]], 'speed': 3, 'resistance': 3, 'attack_radius' : 80, 'notice_radius' : 360},
-	ENTITY_MAPPING[2]['name']: {'health': 300,'exp':250,'damage':40,'attack_type': ATTACK_TYPE[1],  'attack_sound':ATTACK_SOUND[ATTACK_TYPE[1]],'speed': 2, 'resistance': 3, 'attack_radius' : 120, 'notice_radius' : 400},
-	ENTITY_MAPPING[3]['name']: {'health': 100,'exp':110,'damage':8,'attack_type': ATTACK_TYPE[2], 'attack_sound':ATTACK_SOUND[ATTACK_TYPE[2]], 'speed': 4, 'resistance': 3, 'attack_radius' : 60, 'notice_radius' : 350},
-	ENTITY_MAPPING[4]['name']: {'health': 70,'exp':120,'damage':6,'attack_type': ATTACK_TYPE[3], 'attack_sound':ATTACK_SOUND[ATTACK_TYPE[3]], 'speed': 3, 'resistance': 3, 'attack_radius' : 50, 'notice_radius' : 300}
+	ENTITY_MAPPING[1]['name']: {'health': 100,'exp':100,'damage':20,'attack_type': ATTACK_TYPE[0], 'attack_sound':ATTACK_SOUND[ATTACK_TYPE[0]], 'speed': 3, 'resistance': 3, 'attack_radius' : 80, 'notice_radius' : 360, 'energy' : 100},
+	ENTITY_MAPPING[2]['name']: {'health': 300,'exp':250,'damage':40,'attack_type': ATTACK_TYPE[1],  'attack_sound':ATTACK_SOUND[ATTACK_TYPE[1]],'speed': 2, 'resistance': 3, 'attack_radius' : 120, 'notice_radius' : 400, 'energy' : 100},
+	ENTITY_MAPPING[3]['name']: {'health': 100,'exp':110,'damage':8,'attack_type': ATTACK_TYPE[2], 'attack_sound':ATTACK_SOUND[ATTACK_TYPE[2]], 'speed': 4, 'resistance': 3, 'attack_radius' : 60, 'notice_radius' : 350, 'energy' : 100},
+	ENTITY_MAPPING[4]['name']: {'health': 70,'exp':120,'damage':6,'attack_type': ATTACK_TYPE[3], 'attack_sound':ATTACK_SOUND[ATTACK_TYPE[3]], 'speed': 3, 'resistance': 3, 'attack_radius' : 50, 'notice_radius' : 300, 'energy' : 100}
 }
 
 # -------------------------------------------------| UI AND COLORS SETTINGS |-------------------------------------------------

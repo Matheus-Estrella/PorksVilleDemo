@@ -1,6 +1,5 @@
 import pygame
-from settings import MAGIC_LIST,WEAPONS_LIST
-from settings import UI_SETTINGS,COLORS_SETTINGS
+from settings import MAGIC_LIST,WEAPONS_LIST,UI_SETTINGS,COLORS_SETTINGS
 
 class UI:
     def __init__(self):
@@ -26,6 +25,8 @@ class UI:
             path = magic['graphic']
             magic = pygame.image.load(magic['graphic']).convert_alpha()
             self.magic_graphics.append(magic)
+
+        # convert bag dictionary -- for bag implementation
 
     def show_bar(self,current,max_amount,bg_rect,color):
         #draw background
@@ -75,6 +76,8 @@ class UI:
         magic_rect = magic_surf.get_rect(center = bg_rect.center)
 
         self.display_surface.blit(magic_surf,magic_rect)  
+
+    # bag overlay -- for bag implementation
 
     # DEFINIR DEMAIS OVERLAYS NECESSÁRIOS
 

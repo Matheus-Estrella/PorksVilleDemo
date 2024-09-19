@@ -4,55 +4,38 @@ from support import *
 from settings import MONSTER_DATA, MONSTER_SETTINGS
 
 class Enemy(Entity):
-    def __init__(self,monster_name,pos,groups,obstacle_sprites,damage_player,trigger_death_particles,add_exp):
+    def __init__(self,sprite_type,monster_name,pos,groups,obstacle_sprites,damage_player,trigger_death_particles,add_exp):
     
         #general setup
-        super().__init__(groups)
-        self.sprite_type = 'enemy'
+        super().__init__(sprite_type,obstacle_sprites,pos,groups)
         
         # graphics setup
         self.import_graphics(monster_name)
-        self.status ='idle'
+
         self.image = self.animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(topleft = pos)
         self.hitbox = self.rect.inflate(0,-10)
 
-        # obstacle settings
-        self.obstacle_sprites = obstacle_sprites
-
         # stats
         self.monster_name = monster_name
-        monster_info = MONSTER_DATA[self.monster_name]
-        self.health = monster_info['health']
-        self.exp = monster_info['exp']
-        self.speed = monster_info['speed']
-        self.attack_damage = monster_info['damage']
-        self.resistance = monster_info['resistance']
-        self.attack_radius = monster_info['attack_radius']
-        self.notice_radius = monster_info['notice_radius']
-        self.attack_type = monster_info['attack_type']
-
-        # attacking
-        
-        self.can_attack = True
-        self.attack_time = None
-        self.attack_cooldown = 400
+        stats = MONSTER_DATA[self.monster_name]
+        self.health = stats['health']
+        self.exp = stats['exp']
+        self.speed = stats['speed']
+        self.base_attack_damage = stats['damage']
+        self.resistance = stats['resistance']
+        self.attack_radius = stats['attack_radius']
+        self.notice_radius = stats['notice_radius']
+        self.attack_type = stats['attack_type']
 
         # player interaction
         self.add_exp = add_exp
         self.damage_player = damage_player
         self.trigger_death_particles = trigger_death_particles
 
-        # invincibility timer  # ---------> COULD BE ON ENTITIES?
-        self.vulnerable = True
-        self.hurt_time = None
-        self.invulnerability_duration = 300
-
         # sounds
-        self.death_sound = pygame.mixer.Sound(MONSTER_SETTINGS['death_sound'])
         self.hit_sound = pygame.mixer.Sound(MONSTER_SETTINGS['hit_sound'])
-        self.attack_sound = pygame.mixer.Sound(monster_info['attack_sound'])
-        self.death_sound.set_volume(MONSTER_SETTINGS['death_sound_volume'])
+        self.attack_sound = pygame.mixer.Sound(stats['attack_sound'])
         self.hit_sound.set_volume(MONSTER_SETTINGS['hit_sound_volume'])
         self.attack_sound.set_volume(MONSTER_SETTINGS['monster_attack_sound_volume'])
     
@@ -91,7 +74,7 @@ class Enemy(Entity):
     def actions(self,player):
         if self.status == 'attack':
             self.attack_time = pygame.time.get_ticks()
-            self.damage_player(self.attack_damage,self.attack_type)
+            self.damage_player(self.base_attack_damage,self.attack_type)
             self.attack_sound.play()
         elif self.status == 'move':
             self.direction = self.get_player_distance_direction(player)[1]
@@ -127,7 +110,7 @@ class Enemy(Entity):
 
     def get_damage(self,player,attack_type):
         if self.vulnerable:
-            self.death_sound.play()
+            self.hit_sound.play()
             self.direction = self.get_player_distance_direction(player)[1]
             if attack_type == 'weapon':
                 self.health -= player.get_full_weapon_damage()

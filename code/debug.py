@@ -4,7 +4,7 @@ from settings import COLORS_SETTINGS
 pygame.init()
 font = pygame.font.Font(None, 40)
 
-def Debug(info, x, y, text_color=None, duration=1500):
+def Debug(info, x, y, text_color=None, duration=7500):
     global debug_start_time, debug_info, debug_x, debug_y, debug_text_color
 
     if 'debug_start_time' not in globals():

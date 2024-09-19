@@ -35,7 +35,8 @@ class MagicPlayer:
             elif attack_direction == 'up': direction = pygame.math.Vector2(0,-1)
             else: direction = pygame.math.Vector2(0,1)
 
-            for i in range(1,6):
+            
+            for i in range(1,MAGIC_LIST[str(0)]['attack_amount']):
                 rand_dist = TILESIZE//3
                 
                 if direction.x: #horizontal

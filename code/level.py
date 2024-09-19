@@ -76,7 +76,8 @@ class Level:
                             # analyzing interactive column type that has a programming background
                             # if entity == player
                             if col == ENTITY_MAPPING[0]['id']:
-                                self.player = Player( 
+                                self.player = Player(
+                                    PLAYER,
                                     (x,y),
                                     [self.visible_sprites],
                                     self.obstacles_sprites,
@@ -94,7 +95,10 @@ class Level:
                                         entity_type = index['entity_type']
                                         break
                                 if(entity_type == ENEMY):
-                                    Enemy(monster_name,(x,y),
+                                    Enemy(
+                                        ENEMY,
+                                        monster_name,
+                                        (x,y),
                                         [self.visible_sprites, self.attackable_sprites],
                                         self.obstacles_sprites,
                                         self.damage_player,

@@ -4,22 +4,22 @@ from support import import_folder
 from entity import Entity
 
 from termsSettings import *
-from settings import HITBOX_OFFSET,CHARACTER_IMAGES, WEAPONS_LIST,MAGIC_LIST,GAME_SOUNDS,CHARACTER_DATA,CHARACTER_ANIMATIONS,EASTER_EGG
+from settings import HITBOX_OFFSET,CHARACTER_IMAGES, WEAPONS_LIST,MAGIC_LIST,GAME_SOUNDS,CHARACTER_DATA,CHARACTER_ANIMATIONS,WIDTH, HEIGHT,EASTER_EGG
 
 class Player(Entity):
-    def __init__(self,pos,groups,obstacle_sprites, create_attack, destoy_attack,create_magic):
+    def __init__(self,sprite_type,pos,groups,obstacle_sprites, create_attack, destroy_attack,create_magic):
 
         #general setup
-        super().__init__(groups)
-        self.sprite_type = PLAYER
+        super().__init__(sprite_type,obstacle_sprites,pos,groups)
 
         # graphics setup
         self.transforming = False
         self.character_form = 0
-        self.status = 'down'
+
         self.image = pygame.image.load(CHARACTER_IMAGES['0']['image']).convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
         self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET[PLAYER])
+
         self.import_player_assets()
 
         # dm test mode
@@ -32,9 +32,6 @@ class Player(Entity):
         self.talking = False
         self.grabbing = False
 
-        # obstacle settings
-        self.obstacle_sprites = obstacle_sprites
-
         # stats
         self.stats = CHARACTER_DATA['stats']
         self.max_stats = CHARACTER_DATA['max_stats']
@@ -43,17 +40,13 @@ class Player(Entity):
         self.energy = self.stats['energy'] * 0.8
         self.speed = self.stats['speed']
         self.exp = 500
+        self.base_attack_damage = self.stats['attack']
         self.energy_fill_speed = 0.01
         self.health_fill_speed = 0.01
-       
-        # attacking
-        self.can_attack = False
-        self.attack_cooldown = 400
-        self.attack_time = None
         
         # weapon 
         self.create_attack = create_attack
-        self.destoy_attack = destoy_attack
+        self.destoy_attack = destroy_attack
         self.weapon_index = 0
         self.weapon = list(WEAPONS_LIST.keys())[self.weapon_index]
 
@@ -69,11 +62,6 @@ class Player(Entity):
         # switch cooldown
         self.switch_duration_cooldown = 200
         self.magic_switch_time = None
-
-        # damage timer
-        self.vulnerable = True
-        self.hurt_time = None
-        self.invulnerability_duration = 500
 
         # import sound
         self.weapon_attack_sound = pygame.mixer.Sound(GAME_SOUNDS['weapon']['path'])
@@ -151,16 +139,19 @@ class Player(Entity):
             # Master Mode On/Off
             if keys[pygame.K_p] and keys[pygame.K_o] and keys[pygame.K_r] and keys[pygame.K_k]:
                 self.dm_mode = not self.dm_mode
+
+                debug_x = WIDTH*0.5 - 64
+                debug_y = HEIGHT*0.5 - 64
+
                 if self.dm_mode:
                     self.dm_energy_speed = 0.09
                     self.dm_life_regen_speed = 0.04
                     self.dm_invulnerability = 500
-                    Debug("HACKER MODE ON",160,90,'red')
+                    Debug("HACK ON",debug_x,debug_y,'red')
                 else:
                     self.dm_energy_speed = 0.0
                     self.dm_invulnerability = 0 
-                    Debug("HACKER MODE OFF",160,90,'red')
-                
+                    Debug("HACK OFF",debug_x,debug_y,'red')              
 
 
             # ABAIXO DESTAS LINHAS HÁ AS CONFIGURAÇÕES ADICIONAIS PARA PORKSVILLE
@@ -254,14 +245,12 @@ class Player(Entity):
             self.image.set_alpha(255)
 
     def get_full_weapon_damage(self):
-        base_damage = self.stats['attack']
         weapon_damage = WEAPONS_LIST[self.weapon]['damage']
-        return base_damage+weapon_damage
+        return self.base_attack_damage+weapon_damage
     
     def get_full_magic_damage(self):
-        base_damage = self.stats['attack']
         magic_damage = MAGIC_LIST[self.magic]['strength']
-        return base_damage+magic_damage
+        return self.base_attack_damage+magic_damage
 
     def energy_recovery(self):
         if self.energy < self.stats['energy']:
