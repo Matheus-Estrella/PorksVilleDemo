@@ -1,5 +1,5 @@
 import pygame
-from settings import *
+from settings import UI_SETTINGS,COLORS_SETTINGS
 
 class Upgrade:
 	def __init__(self,player):
@@ -10,7 +10,7 @@ class Upgrade:
 		self.attribute_nr = len(player.stats)
 		self.attribute_names = list(player.stats.keys())
 		self.max_values = list(player.max_stats.values())
-		self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
+		self.font = pygame.font.Font(UI_SETTINGS['ui_font'], UI_SETTINGS['ui_font_size'])
 
 		# item creation
 		self.height = self.display_surface.get_size()[1] * 0.75
@@ -82,7 +82,7 @@ class Item:
 		self.font = font
 
 	def display_names(self,surface,name,cost,selected):
-		color = TEXT_COLOR_SELECTED if selected else TEXT_COLOR
+		color = COLORS_SETTINGS['text_color_selected'] if selected else COLORS_SETTINGS['text_color']
 
 		# title
 		title_surf = self.font.render(name,False,color)
@@ -101,7 +101,7 @@ class Item:
 		# drawing setup
 		top = self.rect.midtop + pygame.math.Vector2(0,60)
 		bottom = self.rect.midbottom - pygame.math.Vector2(0,60)
-		color = BAR_COLOR_SELECTED if selected else BAR_COLOR
+		color = COLORS_SETTINGS['bar_color_selected'] if selected else COLORS_SETTINGS['bar_color']
 
 		# bar setup
 		full_height = bottom[1] - top[1]
@@ -125,11 +125,11 @@ class Item:
 
 	def display(self,surface,selection_num,name,value,max_value,cost):
 		if self.index == selection_num:
-			pygame.draw.rect(surface,UPGRADE_BG_COLOR_SELECTED,self.rect)
-			pygame.draw.rect(surface,UI_BORDER_COLOR,self.rect,4)
+			pygame.draw.rect(surface,UI_SETTINGS['upgrade_bg_color_selected'],self.rect)
+			pygame.draw.rect(surface,UI_SETTINGS['ui_border_color'],self.rect,4)
 		else:
-			pygame.draw.rect(surface,UI_BG_COLOR,self.rect)
-			pygame.draw.rect(surface,UI_BORDER_COLOR,self.rect,4)
+			pygame.draw.rect(surface,UI_SETTINGS['ui_bg_color'],self.rect)
+			pygame.draw.rect(surface,UI_SETTINGS['ui_border_color'],self.rect,4)
 	
 		self.display_names(surface,name,cost,self.index == selection_num)
 		self.display_bar(surface,value,max_value,self.index == selection_num)

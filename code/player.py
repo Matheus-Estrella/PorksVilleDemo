@@ -1,40 +1,55 @@
 import pygame
 from debug import Debug
-from settings import *
 from support import import_folder
 from entity import Entity
 
+from termsSettings import *
+from settings import HITBOX_OFFSET,CHARACTER_IMAGES, WEAPONS_LIST,MAGIC_LIST,GAME_SOUNDS,CHARACTER_DATA,CHARACTER_ANIMATIONS,WIDTH, HEIGHT,EASTER_EGG
+
 class Player(Entity):
-    def __init__(self,pos,groups,obstacle_sprites, create_attack, destoy_attack,create_magic):
-        super().__init__(groups)
-        self.image = pygame.image.load(TEST_PLAYER).convert_alpha()
-        self.rect = self.image.get_rect(topleft = pos)
-        self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET['player'])
-        self.character_form = 0
+    def __init__(self,sprite_type,pos,groups,obstacle_sprites, create_attack, destroy_attack,create_magic):
+
+        #general setup
+        super().__init__(sprite_type,obstacle_sprites,pos,groups)
 
         # graphics setup
-        self.import_player_assets()
-        self.status = 'down'
-
-        # movement
-        self.attacking = False
-        self.attack_cooldown = 400
-        self.attack_time = None
-
-        self.talking = False
         self.transforming = False
+        self.character_form = '0'
+        self.animations = {}
+
+        self.image = pygame.image.load(CHARACTER_IMAGES['image']).convert_alpha()
+        self.rect = self.image.get_rect(topleft = pos)
+        self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET[PLAYER])
+
+        self.import_player_assets()
+
+        # dm test mode
+        self.dm_mode = False
+        self.dm_energy_speed = 0
+        self.dm_life_regen_speed = 0
+        self.dm_invulnerability = 0 
+
+        # interactions
+        self.talking = False
         self.grabbing = False
 
-        self.obstacle_sprites = obstacle_sprites
-
-        # cooldown
-        self.switch_duration_cooldown = 200
-
-        # weapon
+        # stats
+        self.stats = CHARACTER_DATA['stats']
+        self.max_stats = CHARACTER_DATA['max_stats']
+        self.upgrade_cost = CHARACTER_DATA['upgrade_cost']
+        self.health = self.stats['health'] * 0.5
+        self.energy = self.stats['energy'] * 0.8
+        self.speed = self.stats['speed']
+        self.exp = 500
+        self.base_attack_damage = self.stats['attack']
+        self.energy_fill_speed = 0.01
+        self.health_fill_speed = 0.01
+        
+        # weapon 
         self.create_attack = create_attack
-        self.destoy_attack = destoy_attack
+        self.destoy_attack = destroy_attack
         self.weapon_index = 0
-        self.weapon = list(WEAPON_DATA.keys())[self.weapon_index]
+        self.weapon = list(WEAPONS_LIST.keys())[self.weapon_index]
 
         self.can_switch_weapon = True
         self.weapon_switch_time = None
@@ -42,41 +57,29 @@ class Player(Entity):
         # magic
         self.create_magic = create_magic
         self.magic_index = 0
-        self.magic = list(MAGIC_DATA.keys())[self.magic_index]
+        self.magic = list(MAGIC_LIST.keys())[self.magic_index]
         self.can_switch_magic = True
+
+        # switch cooldown
+        self.switch_duration_cooldown = 200
         self.magic_switch_time = None
 
-        # stats
-        self.stats = STATS
-        self.max_stats = MAX_STATS
-        self.upgrade_cost = UPGRADE_COST
-        self.health = self.stats[HEALTH] * 0.5
-        self.energy = self.stats[ENERGY] * 0.8
-        self.speed = self.stats[SPEED]
-        self.exp = 500
-        self.energy_fill_speed = 0.01
-        self.dm_energy_speed = 0.09
-        self.health_fill_speed = 0.01
-
-        # damage timer
-        self.vulnerable = True
-        self.hurt_time = None
-        self.invulnerability_duration = 500
-        self.dm_invulnerability = 4500 # just to easier the tests
-
         # import sound
-        self.weapon_attack_sound = pygame.mixer.Sound(WEAPON_ATTACK_SOUND_FOLDER)
-        self.weapon_attack_sound.set_volume(WEAPON_ATTACK_SOUND_VOLUME)
+        self.weapon_attack_sound = pygame.mixer.Sound(GAME_SOUNDS['weapon']['path'])
+        self.weapon_attack_sound.set_volume(GAME_SOUNDS['weapon']['volume'])
+        
+    def change_character_form(self, form_version):
+        self.character_form = form_version  # '0', '1', etc.
+        self.import_player_assets()
 
     def import_player_assets(self):
-        self.animations = CHARACTER_ANIMATIONS
-        for animation in self.animations.keys():
-            full_path = CHARACTER_FOLDER + '/' + animation
-            self.animations[animation] = import_folder(full_path)
+        # add puffing particles
+        character_folder = f'../graphics/player/{self.character_form}/'
+        self.animations = {animat: import_folder(character_folder + animat) for animat in CHARACTER_ANIMATIONS}
 
     # movement
     def input(self):
-        if not self.attacking: # or self.talking or self.transforming or self.grabbing):
+        if not self.can_attack: # or self.talking or self.transforming or self.grabbing):
             keys = pygame.key.get_pressed()
 
             # Movement Input
@@ -100,18 +103,18 @@ class Player(Entity):
 
             # Attack input
             if keys[pygame.K_SPACE]:
-                self.attacking = True
+                self.can_attack = True
                 self.attack_time = pygame.time.get_ticks()
                 self.create_attack()
                 self.weapon_attack_sound.play()
             
             # Magic input
             if keys[pygame.K_LCTRL]:
-                self.attacking = True
+                self.can_attack = True
                 self.attack_time = pygame.time.get_ticks()
-                style = list(MAGIC_DATA.keys())[self.magic_index]
-                strength = list(MAGIC_DATA.values())[self.magic_index]['strength'] + self.stats[MAGIC]
-                cost = list(MAGIC_DATA.values())[self.magic_index]['cost']
+                style = MAGIC_LIST[list(MAGIC_LIST.keys())[self.magic_index]]['magic_name']
+                strength = list(MAGIC_LIST.values())[self.magic_index]['strength'] + self.stats['magic']
+                cost = list(MAGIC_LIST.values())[self.magic_index]['cost']
 
                 self.create_magic(style,strength,cost)
 
@@ -120,23 +123,41 @@ class Player(Entity):
                 self.can_switch_weapon = False
                 self.weapon_switch_time = pygame.time.get_ticks()
 
-                if self.weapon_index < len(list(WEAPON_DATA.keys())) -1:
+                if self.weapon_index < len(list(WEAPONS_LIST.keys())) -1:
                     self.weapon_index += 1
                 else:
                     self.weapon_index = 0
-                self.weapon = list(WEAPON_DATA.keys())[self.weapon_index]
+                self.weapon = list(WEAPONS_LIST.keys())[self.weapon_index]
 
             # Switch magic input
             if keys[pygame.K_e] and self.can_switch_magic:
                 self.can_switch_magic = False
                 self.magic_switch_time = pygame.time.get_ticks()
 
-                if self.magic_index < len(list(MAGIC_DATA.keys())) -1:
+                if self.magic_index < len(list(MAGIC_LIST.keys())) -1:
                     self.magic_index += 1
                 else:
                     self.magic_index = 0
-                self.magic = list(MAGIC_DATA.keys())[self.magic_index]
+                self.magic = list(MAGIC_LIST.keys())[self.magic_index]
             
+            # Master Mode On/Off
+            if keys[pygame.K_p] and keys[pygame.K_o] and keys[pygame.K_r] and keys[pygame.K_k]:
+                self.dm_mode = not self.dm_mode
+
+                debug_x = WIDTH*0.5 - 64
+                debug_y = HEIGHT*0.5 - 64
+
+                if self.dm_mode:
+                    self.dm_energy_speed = 0.09
+                    self.dm_life_regen_speed = 0.04
+                    self.dm_invulnerability = 500
+                    Debug("HACK ON",debug_x,debug_y,'red')
+                else:
+                    self.dm_energy_speed = 0.0
+                    self.dm_invulnerability = 0 
+                    Debug("HACK OFF",debug_x,debug_y,'red')              
+
+
             # ABAIXO DESTAS LINHAS HÁ AS CONFIGURAÇÕES ADICIONAIS PARA PORKSVILLE
             # ENTRETANTO, FORAM IDENTADAS (CONTRA IDENTAR AO IMPLEMENTAR) E COMENTADAS (DESCOMENTAR AO IMPLEMENTAR)
             # POIS SUAS ANIMAÇÕES NÃO FORAM DEFINIDAS ATÉ O MOMENTO, ENTÃO, O ACIONAMENTO DESTAS TECLAS ADICIONAIS
@@ -146,12 +167,12 @@ class Player(Entity):
 
             # Eat input   ---> configure latter
             if keys[pygame.K_f]:
-                self.attacking = True
+                self.can_attack = True
                 self.attack_time = pygame.time.get_ticks()
             
             # Grab input   ---> configure latter
             if keys[pygame.K_g]:
-                self.attacking = True
+                self.can_attack = True
                 self.grabbing = True
                 self.attack_time = pygame.time.get_ticks()
 
@@ -177,7 +198,7 @@ class Player(Entity):
             if not 'idle' in self.status and not 'attack' in self.status:
                 self.status = self.status + '_idle'
 
-        if self.attacking:
+        if self.can_attack:
             self.direction.x = 0
             self.direction.y = 0
             if not 'attack' in self.status:
@@ -192,8 +213,8 @@ class Player(Entity):
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
         if self.attack_time:
-            if current_time - self.attack_time >= self.attack_cooldown + WEAPON_DATA[self.weapon]['cooldown']:
-                self.attacking = False
+            if current_time - self.attack_time >= self.attack_cooldown + WEAPONS_LIST[self.weapon]['cooldown']:
+                self.can_attack = False
                 self.destoy_attack()
 
         # switching weapons setups
@@ -228,20 +249,21 @@ class Player(Entity):
             self.image.set_alpha(255)
 
     def get_full_weapon_damage(self):
-        base_damage = self.stats['attack']
-        weapon_damage = WEAPON_DATA[self.weapon]['damage']
-        return base_damage+weapon_damage
+        weapon_damage = WEAPONS_LIST[self.weapon]['damage']
+        return self.base_attack_damage+weapon_damage
     
     def get_full_magic_damage(self):
-        base_damage = self.stats['attack']
-        magic_damage = MAGIC_DATA[self.magic]['strength']
-        return base_damage+magic_damage
+        magic_damage = MAGIC_LIST[self.magic]['strength']
+        return self.base_attack_damage+magic_damage
 
     def energy_recovery(self):
-        if self.energy < self.stats[ENERGY]:
-            self.energy += (self.energy_fill_speed + self.dm_energy_speed) * self.stats[MAGIC]
+        if self.energy < self.stats['energy']:
+            self.energy += (self.energy_fill_speed + self.dm_energy_speed) * self.stats['magic']
         else:
-            self.energy = self.stats[ENERGY]
+            self.energy = self.stats['energy']
+
+        if self.health < self.stats['health'] and self.dm_mode:
+            self.health += (self.health_fill_speed + self.dm_life_regen_speed) * self.stats['magic']
 
     def get_value_by_index(self,index):
         return list(self.stats.values())[index]

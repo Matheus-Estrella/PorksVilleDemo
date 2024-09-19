@@ -1,7 +1,7 @@
 import pygame,sys
-from settings import *
 from debug import Debug
 from level import Level
+from settings import GAME_SOUNDS,FPS,WIDTH,HEIGHT,COLORS_SETTINGS
 
 class Game:
     def __init__(self):
@@ -14,8 +14,8 @@ class Game:
         self.level = Level()
 
         #sound
-        main_sound = pygame.mixer.Sound(MAIN_SOUND_FOLDER)
-        main_sound.set_volume(MAIN_SOUND_VOLUME)
+        main_sound = pygame.mixer.Sound(GAME_SOUNDS['main']['path'])
+        main_sound.set_volume(GAME_SOUNDS['main']['volume'])
         main_sound.play(loops = -1)
 
     def run(self):
@@ -28,8 +28,7 @@ class Game:
                     if event.key == pygame.K_m:
                         self.level.toggle_menu()
 
-            self.screen.fill(WATER_COLOR)
-            #Debug("Welcome to PorksVille")
+            self.screen.fill(COLORS_SETTINGS['water_color'])
             self.level.run()
             pygame.display.update()
             self.clock.tick(FPS)
