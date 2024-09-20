@@ -47,13 +47,13 @@ class Level:
         layouts = {
             BOUNDARY: import_csv_layout(LEVEL_IMAGES[str(self.level_number)][BOUNDARY]),
             PROP : import_csv_layout(LEVEL_IMAGES[str(self.level_number)][PROP]),
-            OBJECTS : import_csv_layout(LEVEL_IMAGES[str(self.level_number)][OBJECTS]),
+            LARGE_OBJECTS : import_csv_layout(LEVEL_IMAGES[str(self.level_number)][LARGE_OBJECTS]),
             ENTITY : import_csv_layout(LEVEL_IMAGES[str(self.level_number)][ENTITY])
         }
         
         graphics = {
             PROP : import_folder(LEVEL_IMAGES[str(self.level_number)][GRAPHIC_PROP]),
-            OBJECTS : import_folder(LEVEL_IMAGES[str(self.level_number)][GRAPHIC_OBJECTS])
+            LARGE_OBJECTS : import_folder(LEVEL_IMAGES[str(self.level_number)][GRAPHIC_OBJECTS])
         }
         
         for style,layout in layouts.items():
@@ -62,23 +62,23 @@ class Level:
                     if col != INTERACTIONS_MAPPING[0]['id']:
                         x = col_index * TILESIZE
                         y = row_index * TILESIZE
-                        if style == BOUNDARY:
-                            Tile((x,y),[self.obstacles_sprites],BOUNDARY)
+                        if style == INTERACTIONS_MAPPING[0]['name']:
+                            Tile((x,y),col,[self.obstacles_sprites],INTERACTIONS_MAPPING[0]['name'])
                         if style == PROP:
                             random_props_image = choice(graphics[PROP])
-                            Tile((x,y),
+                            Tile((x,y),col,
                                  [self.visible_sprites,self.obstacles_sprites,self.attackable_sprites],
                                  PROP,random_props_image)
-                        if style == OBJECTS:
-                            surf = graphics[OBJECTS][int(col)]
-                            Tile((x,y),[self.visible_sprites,self.obstacles_sprites],OBJECTS,surf)
+                        if style == LARGE_OBJECTS:
+                            surf = graphics[LARGE_OBJECTS][int(col)]
+                            Tile((x,y),col,[self.visible_sprites,self.obstacles_sprites],LARGE_OBJECTS,surf)
                         if style == ENTITY:
                             # analyzing interactive column type that has a programming background
                             # if entity == player
                             if col == ENTITY_MAPPING[0]['id']:
                                 self.player = Player(
                                     PLAYER,
-                                    (x,y),
+                                    (x,y),col,
                                     [self.visible_sprites],
                                     self.obstacles_sprites,
                                     self.create_attack,
@@ -98,7 +98,7 @@ class Level:
                                     Enemy(
                                         ENEMY,
                                         monster_name,
-                                        (x,y),
+                                        (x,y),col,
                                         [self.visible_sprites, self.attackable_sprites],
                                         self.obstacles_sprites,
                                         self.damage_player,

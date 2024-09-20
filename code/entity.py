@@ -1,24 +1,28 @@
 import pygame
 from math import sin
 from termsSettings import PLAYER,ENEMY,NPC
-from settings import MONSTER_SETTINGS, CHARACTER_IMAGES,HITBOX_OFFSET
+from settings import MONSTER_SETTINGS,ENTITY_MAPPING, CHARACTER_DATA,MONSTER_DATA, CHARACTER_IMAGES,HITBOX_OFFSET
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self,sprite_type,obstacle_sprites,pos,groups):
+    def __init__(self,sprite_type,obstacle_sprites,pos,sprite_id,groups):
         super().__init__(groups)
         self.frame_index = 0
         self.animation_speed = 0.15
         self.direction = pygame.math.Vector2()
 
         self.sprite_type = sprite_type
+        self.sprite_id = sprite_id
 
         # obstacle settings
         self.obstacle_sprites = obstacle_sprites
 
         # --- Heir definitions --- #
+
+        # common stats
         
-        #graphics
-        self.can_attack, self.status = self.heir_types(pos)
+        
+        # entities attributes
+        self.respawn,self.can_attack, self.status,self.stats,self.health,self.energy,self.speed,self.exp,self.base_attack_damage,self.resistance = self.heir_types(pos,sprite_id)
 
         # attacking
         self.attack_cooldown = 400
@@ -33,24 +37,50 @@ class Entity(pygame.sprite.Sprite):
         self.hurt_time = None
         self.invulnerability_duration = 500
 
-    def heir_types(self,pos):
+    def heir_types(self,pos,sprite_id):
         if self.sprite_type == PLAYER:
             can_attack = False
             status = 'down'
-            return can_attack,status
+
+            # -- stats implementation -- #
+
+            stats = CHARACTER_DATA['stats']
+            health = stats['health'] * 0.5
+            energy = stats['energy'] * 0.8
+            speed = stats['speed']
+            exp = 0
+            base_attack_damage = stats['attack']
+            resistance = stats['resistance']
+            respawn = stats['respawn']
+
+            return respawn,can_attack,status,stats,health,energy,speed,exp,base_attack_damage,resistance
             pass
 
         elif self.sprite_type == ENEMY:
             can_attack = True
             status ='idle'
-            return can_attack,status
+
+            # -- stats implementation -- #
+
+            stats = None
+            for key,entity in ENTITY_MAPPING.items():
+                if entity['id'] == sprite_id:
+                    stats = MONSTER_DATA[entity['name']]            
+            health = stats['health']
+            energy = stats['energy']
+            speed = stats['speed']
+            exp = stats['exp']
+            base_attack_damage = stats['damage']
+            resistance = stats['resistance']
+            respawn = stats['respawn']
+
+            return respawn,can_attack,status,stats,health,energy,speed,exp,base_attack_damage,resistance
             pass
 
         elif self.sprite_type == NPC:
             pass
         else:
             pass
-
         
     def move(self,speed):
         if self.direction.magnitude() != 0:

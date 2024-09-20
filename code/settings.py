@@ -10,7 +10,7 @@ TILESIZE = 64
 
 HITBOX_OFFSET = {
     PLAYER: -26,
-    OBJECTS: -40,
+    LARGE_OBJECTS: -40,
     PROP : -10,
     BOUNDARY : 0
 }
@@ -31,7 +31,7 @@ LEVEL_IMAGES = { # 'level' : {level images}
         BACKGROUND:'../graphics/tilemap/ground.png',
         BOUNDARY:'../map/map_FloorBlocks.csv',
         PROP:'../map/map_Grass.csv',
-        OBJECTS:'../map/map_Objects.csv',
+        LARGE_OBJECTS:'../map/map_Objects.csv',
         ENTITY:'../map/map_Entities.csv',
         # Background Components sources
         GRAPHIC_PROP:'../graphics/grass',
@@ -41,7 +41,7 @@ LEVEL_IMAGES = { # 'level' : {level images}
         BACKGROUND:'../graphics/tilemap/ground.png',
         BOUNDARY:'../map/map_FloorBlocks.csv',
         PROP:'../map/map_Grass.csv',
-        OBJECTS:'../map/map_Objects.csv',
+        LARGE_OBJECTS:'../map/map_Objects.csv',
         ENTITY:'../map/map_Entities.csv',
         # Background Components sources
         GRAPHIC_PROP:'../graphics/grass',
@@ -59,10 +59,11 @@ CHARACTER_ANIMATIONS = ['up', 'down', 'left', 'right',
                         'up_idle', 'down_idle', 'left_idle', 'right_idle',
                         'up_attack', 'down_attack', 'left_attack', 'right_attack']
 
+EXCLUDED_STATS = {'respawn'}  # used for future stats that isn't on upgrade section
 CHARACTER_DATA = {
-    'stats':{'health':100,'energy':60,'attack':10,'magic':4,'resistance':1,'speed':5},
-    'max_stats':{'health':300,'energy':140,'attack':20,'magic':10,'resistance':10,'speed':10},
-    'upgrade_cost':{'health':100,'energy':100,'attack':100,'magic':100,'resistance':100,'speed':100},
+    'stats':{'health':100,'energy':60,'attack':10,'magic':4,'resistance':5,'speed':5,'respawn':3},
+    'max_stats':{'health':300,'energy':140,'attack':20,'magic':10,'resistance':10,'speed':10,'respawn':3},
+    'upgrade_cost':{'health':100,'energy':100,'attack':100,'magic':100,'resistance':100,'speed':100,'respawn':3},
 }
 
 # -------------------------------------------------| ATTACKS SETTINGS |-------------------------------------------------
@@ -75,7 +76,7 @@ MAGIC_LIST = {
          'magic_particle':'fire',
          'strength':75,
          'cost':15,
-         'attack_amount':6,
+         'attack_amount':10,
          'graphic':'../graphics/particles/flame/fire.png',
          'graphic_folder':'../graphics/particles/flame/frames',
          'sub_graphic_folder':None,
@@ -99,19 +100,68 @@ MAGIC_LIST = {
 # weapons
 
 WEAPONS_LIST = {
-    'sword':{'cooldown':100,'damage':15,'graphic':'../graphics/weapons/sword/full.png'},
-    'lance' : {'cooldown':100,'damage':15,'graphic':'../graphics/weapons/lance/full.png'},
-    'axe' : {'cooldown':100,'damage':15,'graphic':'../graphics/weapons/axe/full.png'},
-    'rapier' : {'cooldown':100,'damage':15,'graphic':'../graphics/weapons/rapier/full.png'},
-    'sai': {'cooldown':100,'damage':15,'graphic':'../graphics/weapons/sai/full.png'}
+    'sword':{'cooldown':100,'damage':15,'graphic':'../graphics/weapons/sword/full.png','accessible':True},
+    'lance' : {'cooldown':100,'damage':15,'graphic':'../graphics/weapons/lance/full.png','accessible':True},
+    'axe' : {'cooldown':100,'damage':15,'graphic':'../graphics/weapons/axe/full.png','accessible':True},
+    'rapier' : {'cooldown':100,'damage':15,'graphic':'../graphics/weapons/rapier/full.png','accessible':True},
+    'sai': {'cooldown':100,'damage':15,'graphic':'../graphics/weapons/sai/full.png','accessible':True}
 }
 
 # -------------------------------------------------| INTERACTIONS SETTINGS |-------------------------------------------------
 
-# for further implementations of interactible objects to check ist interaction type
+# for further implementations of interactible objects on map to check isn't interaction type
 INTERACTIONS_MAPPING = {
-    0:{'id':'-1','name':'boundary','interaction_type':INTERACTION[0]}
+    0:{'id':'-1','name':'boundary'},
+    #1:{'id':'?','name':'respwan_spot'}
 }
+
+# sprite_types for itens and interactions
+'''
+
+'totem' = for itens that affects special characteristics of the player (as new magics or their improovement, or even life chances for the gaming)
+'food' = for itens that improove the stats upgrades (exp,health, energy and etc)
+'money' = for itens that grants money
+'weapon' = for itens that grants a new weapon on list
+'magic' = for itens that can cast a magic on it
+'' = for itens that 
+
+'''
+
+OBJECTS_LIST = {
+    0:{'id':'1000','name':'dying_totem','quantity':3,'sprite_type':'totem',
+       'talkable': False,'collectable': True,'grabbable': False,'equipped':False,'consumable': True,
+       'sellable': False, 'value': 'The life has not a price',
+       'life_time':60,'health':100,
+       'upgrade':'respawn','reward':1,
+       'fading':4,
+       'can_shift': False
+       }
+}
+'''
+obects list index = used for references directly the item that should appear
+
+'id': the same id from tiled
+'name': name of the image.png that should be loaded
+'quantity': avaliable amount of the item for bag sistem controll
+'sprite_type': used for ocasional special interactions and animations or references for the item type
+    should also be used for references the images folder as: graphics->special_objects->{sprite_type}
+
+INTERACTIONS_TYPES = 'talkable','collectable','grabbable','equipped','consumable', 'sellable' and etc
+    define the kinds of interactions that that object can provide
+
+'life_time': seconds that the item lingers on the map
+    after the life_time, the object should start fading
+'upgrade' : kind of upgrade that affect the character (None,health,respawn,energy,money,new magic and etc)
+    this feat allow the development of differents applyications on  the character, filtered by the sprite_type
+    references, that should distinguish the nature of the interaction 
+'reward': amount of the upgrade, if item can be used for it.
+'fading' : used for fading the item from screen, when it can't be interactible any more and desapear from the screen
+    this number is the number of images that represents the fading object, cuz their saving name patterns sould be
+    like the example: for 'name' = dying_totem, their 4 range means dying_totem_0,dying_totem_1,dying_totem_2 and dying_totem_3
+'can_shift' : used for objects that can shift its image, or by sequence (changing the sequence of the images)
+or by interaction (for itens that can manifest and animation on interactions)
+
+'''
 
 # -------------------------------------------------| ENEMIES AND NPCS SETTINGS |-------------------------------------------------
 
@@ -148,10 +198,10 @@ ATTACK_PARTICLES = {
 }
 
 MONSTER_DATA = {
-	ENTITY_MAPPING[1]['name']: {'health': 100,'exp':100,'damage':20,'attack_type': ATTACK_TYPE[0], 'attack_sound':ATTACK_SOUND[ATTACK_TYPE[0]], 'speed': 3, 'resistance': 3, 'attack_radius' : 80, 'notice_radius' : 360, 'energy' : 100},
-	ENTITY_MAPPING[2]['name']: {'health': 300,'exp':250,'damage':40,'attack_type': ATTACK_TYPE[1],  'attack_sound':ATTACK_SOUND[ATTACK_TYPE[1]],'speed': 2, 'resistance': 3, 'attack_radius' : 120, 'notice_radius' : 400, 'energy' : 100},
-	ENTITY_MAPPING[3]['name']: {'health': 100,'exp':110,'damage':8,'attack_type': ATTACK_TYPE[2], 'attack_sound':ATTACK_SOUND[ATTACK_TYPE[2]], 'speed': 4, 'resistance': 3, 'attack_radius' : 60, 'notice_radius' : 350, 'energy' : 100},
-	ENTITY_MAPPING[4]['name']: {'health': 70,'exp':120,'damage':6,'attack_type': ATTACK_TYPE[3], 'attack_sound':ATTACK_SOUND[ATTACK_TYPE[3]], 'speed': 3, 'resistance': 3, 'attack_radius' : 50, 'notice_radius' : 300, 'energy' : 100}
+	ENTITY_MAPPING[1]['name']: {'health': 100,'exp':150,'damage':20,'attack_type': ATTACK_TYPE[0], 'attack_sound':ATTACK_SOUND[ATTACK_TYPE[0]], 'speed': 3, 'resistance': 3, 'attack_radius' : 80, 'notice_radius' : 360, 'energy' : 100,'respawn':0},
+	ENTITY_MAPPING[2]['name']: {'health': 300,'exp':300,'damage':40,'attack_type': ATTACK_TYPE[1],  'attack_sound':ATTACK_SOUND[ATTACK_TYPE[1]],'speed': 2, 'resistance': 3, 'attack_radius' : 120, 'notice_radius' : 400, 'energy' : 100,'respawn':0},
+	ENTITY_MAPPING[3]['name']: {'health': 100,'exp':160,'damage':8,'attack_type': ATTACK_TYPE[2], 'attack_sound':ATTACK_SOUND[ATTACK_TYPE[2]], 'speed': 4, 'resistance': 3, 'attack_radius' : 60, 'notice_radius' : 350, 'energy' : 100,'respawn':0},
+	ENTITY_MAPPING[4]['name']: {'health': 70,'exp':170,'damage':6,'attack_type': ATTACK_TYPE[3], 'attack_sound':ATTACK_SOUND[ATTACK_TYPE[3]], 'speed': 3, 'resistance': 3, 'attack_radius' : 50, 'notice_radius' : 300, 'energy' : 100,'respawn':0}
 }
 
 # -------------------------------------------------| UI AND COLORS SETTINGS |-------------------------------------------------

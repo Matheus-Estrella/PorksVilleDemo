@@ -1,5 +1,4 @@
 import pygame
-from settings import *
 from debug import Debug
 
 class Weapon(pygame.sprite.Sprite):

@@ -4,10 +4,10 @@ from support import *
 from settings import MONSTER_DATA, MONSTER_SETTINGS
 
 class Enemy(Entity):
-    def __init__(self,sprite_type,monster_name,pos,groups,obstacle_sprites,damage_player,trigger_death_particles,add_exp):
+    def __init__(self,sprite_type,monster_name,pos,sprite_id,groups,obstacle_sprites,damage_player,trigger_death_particles,add_exp):
     
         #general setup
-        super().__init__(sprite_type,obstacle_sprites,pos,groups)
+        super().__init__(sprite_type,obstacle_sprites,pos,sprite_id,groups)
         
         # graphics setup
         self.import_graphics(monster_name)
@@ -18,15 +18,9 @@ class Enemy(Entity):
 
         # stats
         self.monster_name = monster_name
-        stats = MONSTER_DATA[self.monster_name]
-        self.health = stats['health']
-        self.exp = stats['exp']
-        self.speed = stats['speed']
-        self.base_attack_damage = stats['damage']
-        self.resistance = stats['resistance']
-        self.attack_radius = stats['attack_radius']
-        self.notice_radius = stats['notice_radius']
-        self.attack_type = stats['attack_type']
+        self.attack_radius = self.stats['attack_radius']
+        self.notice_radius = self.stats['notice_radius']
+        self.attack_type = self.stats['attack_type']
 
         # player interaction
         self.add_exp = add_exp
@@ -35,7 +29,7 @@ class Enemy(Entity):
 
         # sounds
         self.hit_sound = pygame.mixer.Sound(MONSTER_SETTINGS['hit_sound'])
-        self.attack_sound = pygame.mixer.Sound(stats['attack_sound'])
+        self.attack_sound = pygame.mixer.Sound(self.stats['attack_sound'])
         self.hit_sound.set_volume(MONSTER_SETTINGS['hit_sound_volume'])
         self.attack_sound.set_volume(MONSTER_SETTINGS['monster_attack_sound_volume'])
     

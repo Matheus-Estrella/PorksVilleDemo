@@ -1,5 +1,5 @@
 import pygame
-from settings import UI_SETTINGS,COLORS_SETTINGS
+from settings import UI_SETTINGS,COLORS_SETTINGS,EXCLUDED_STATS
 
 class Upgrade:
 	def __init__(self,player):
@@ -7,9 +7,10 @@ class Upgrade:
 		# general setup
 		self.display_surface = pygame.display.get_surface()
 		self.player = player
-		self.attribute_nr = len(player.stats)
-		self.attribute_names = list(player.stats.keys())
-		self.max_values = list(player.max_stats.values())
+		self.excluded_stats = EXCLUDED_STATS
+		self.attribute_names = [key for key in player.stats.keys() if key not in self.excluded_stats]
+		self.max_values = [player.max_stats[key] for key in self.attribute_names]
+		self.attribute_nr = len(self.attribute_names)
 		self.font = pygame.font.Font(UI_SETTINGS['ui_font'], UI_SETTINGS['ui_font_size'])
 
 		# item creation
@@ -113,12 +114,13 @@ class Item:
 		pygame.draw.rect(surface,color,value_rect)
 
 	def trigger(self,player):
-		upgrade_attribute = list(player.stats.keys())[self.index]
+		stats_keys = [key for key in player.stats.keys()]
+		upgrade_attribute = stats_keys[self.index]
 
 		if player.exp >= player.upgrade_cost[upgrade_attribute] and player.stats[upgrade_attribute] < player.max_stats[upgrade_attribute]:
 			player.exp -= player.upgrade_cost[upgrade_attribute]
 			player.stats[upgrade_attribute] *= 1.2
-			player.upgrade_cost[upgrade_attribute] *= 1.4
+			player.upgrade_cost[upgrade_attribute] += 50
 
 		if player.stats[upgrade_attribute] > player.max_stats[upgrade_attribute]:
 			player.stats[upgrade_attribute] = player.max_stats[upgrade_attribute]
