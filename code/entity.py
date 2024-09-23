@@ -1,7 +1,7 @@
 import pygame
 from math import sin
 from termsSettings import PLAYER,ENEMY,NPC
-from settings import MONSTER_SETTINGS,ENTITY_MAPPING, CHARACTER_DATA,MONSTER_DATA, CHARACTER_IMAGES,HITBOX_OFFSET
+from settings import MONSTER_SETTINGS,ENTITY_MAPPING, CHARACTER_DATA,MONSTER_DATA, INITIAL_IMAGE,HITBOX_OFFSET
 
 class Entity(pygame.sprite.Sprite):
     def __init__(self,sprite_type,obstacle_sprites,pos,sprite_id,groups):

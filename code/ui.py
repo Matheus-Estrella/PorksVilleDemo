@@ -1,5 +1,5 @@
 import pygame
-from settings import MAGIC_LIST,WEAPONS_LIST,UI_SETTINGS,COLORS_SETTINGS
+from settings import MAGIC_LIST,WEAPONS_LIST,UI_SETTINGS,COLORS_SETTINGS,BAG_LIST,FORMS_LIST
 
 class UI:
     def __init__(self):
@@ -11,6 +11,9 @@ class UI:
         # bar setup
         self.health_bar_rect = pygame.Rect(10,10,UI_SETTINGS['health_bar_width'],UI_SETTINGS['bar_height'])
         self.energy_bar_rect = pygame.Rect(10,34,UI_SETTINGS['energy_bar_width'],UI_SETTINGS['bar_height'])
+
+        # transformation, bag, weapon and magic position
+        self.side_bar_positions = self.get_bar_side_positions(0,-30)
 
         # convert weapon dictionary
         self.weapon_graphics =[]
@@ -26,7 +29,20 @@ class UI:
             magic = pygame.image.load(magic['graphic']).convert_alpha()
             self.magic_graphics.append(magic)
 
-        # convert bag dictionary -- for bag implementation
+        # convert bag dictionary
+        self.bag_graphics =[]
+        for bag in BAG_LIST.values():
+            path = f'../graphics/items/{bag["name"]}/{bag["name"]}.png'
+            bag = pygame.image.load(path).convert_alpha()
+            self.bag_graphics.append(bag)
+
+        # convert form dictionary
+        self.transformation_graphics = []
+        for form_index in FORMS_LIST.keys():
+            path = f'../graphics/player/{form_index}/icon_form/icon.png'
+            form_image = pygame.image.load(path).convert_alpha()
+            self.transformation_graphics.append(form_image)
+
 
     def show_bar(self,current,max_amount,bg_rect,color):
         #draw background
@@ -61,30 +77,46 @@ class UI:
             pygame.draw.rect(self.display_surface,UI_SETTINGS['ui_border_color'],bg_rect,UI_SETTINGS['padding'])
         return bg_rect
 
-    def weapon_overlay(self,weapon_index,has_switched): # to show weapons on its box
-        bg_rect = self.selection_box(UI_SETTINGS['box_pos_x'],
-                                     UI_SETTINGS['box_pos_y'],has_switched)
-        weapon_surf = self.weapon_graphics[weapon_index]
-        weapon_rect = weapon_surf.get_rect(center = bg_rect.center)
+    def get_bar_side_positions(self, x_move, y_move):
 
-        self.display_surface.blit(weapon_surf,weapon_rect)
+        max_x = UI_SETTINGS['box_pos_x'] + x_move
+        min_y = UI_SETTINGS['box_pos_y'] + y_move
+        pad = UI_SETTINGS['padding']
+        box_size = UI_SETTINGS['item_box_size']
+        jump = pad + box_size
 
-    def magic_overlay(self,magic_index,has_switched):
-        bg_rect = self.selection_box(UI_SETTINGS['box_pos_x']+UI_SETTINGS['item_box_size']+UI_SETTINGS['padding'],
-                                     UI_SETTINGS['box_pos_y'],has_switched)
-        magic_surf = self.magic_graphics[magic_index]
-        magic_rect = magic_surf.get_rect(center = bg_rect.center)
+        magic = [max_x,min_y]
+        weapon = [max_x,min_y-jump*1]
+        bag = [max_x,min_y-jump*2]
+        transformation = [max_x,min_y-jump*3]
 
-        self.display_surface.blit(magic_surf,magic_rect)  
+        return {
+        'transformation': transformation,
+        'bag': bag,
+        'weapon': weapon,
+        'magic': magic
+        }
+    def side_bar_overlay(self, indexes, has_switchers):
+        keys = ['weapon', 'magic', 'bag', 'transformation']
+        graphics_lists = [self.weapon_graphics, self.magic_graphics, self.bag_graphics, self.transformation_graphics]
 
-    # bag overlay -- for bag implementation
-
-    # DEFINIR DEMAIS OVERLAYS NECESSÁRIOS
+        for i, key in enumerate(keys):
+            bg_rect = self.selection_box(self.side_bar_positions[key][0],
+                                        self.side_bar_positions[key][1], has_switchers[i])
+            surf = graphics_lists[i][indexes[i]]
+            rect = surf.get_rect(center=bg_rect.center)
+            self.display_surface.blit(surf, rect)
 
     def display(self,player):
         self.show_bar(player.health,player.stats['health'],self.health_bar_rect,COLORS_SETTINGS['health_color'])
         self.show_bar(player.energy,player.stats['energy'],self.energy_bar_rect,COLORS_SETTINGS['energy_color'])
 
         self.show_exp(player.exp)
-        self.weapon_overlay(player.weapon_index,not player.can_switch_weapon)
-        self.magic_overlay(player.magic_index,not player.can_switch_magic)
+
+        indexes = [player.weapon_index, player.magic_index, player.bag_index, player.transformation_index]
+        has_switchers = [not player.can_switch_weapon, 
+                        not player.can_switch_magic, 
+                        not player.can_switch_bag, 
+                        not player.can_switch_form]
+        
+        self.side_bar_overlay(indexes, has_switchers)

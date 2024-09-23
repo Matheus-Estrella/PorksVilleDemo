@@ -4,7 +4,7 @@ from support import import_folder
 from entity import Entity
 
 from termsSettings import *
-from settings import HITBOX_OFFSET,CHARACTER_IMAGES, WEAPONS_LIST,MAGIC_LIST,GAME_SOUNDS,CHARACTER_DATA,CHARACTER_ANIMATIONS,WIDTH, HEIGHT,EASTER_EGG
+from settings import HITBOX_OFFSET,BAG_LIST,FORMS_LIST,INITIAL_IMAGE, WEAPONS_LIST,MAGIC_LIST,GAME_SOUNDS,CHARACTER_DATA,CHARACTER_ANIMATIONS,WIDTH, HEIGHT,EASTER_EGG
 
 class Player(Entity):
     def __init__(self,sprite_type,pos,sprite_id,groups,obstacle_sprites, create_attack, destroy_attack,create_magic):
@@ -14,10 +14,16 @@ class Player(Entity):
 
         # graphics setup
         self.transforming = False
-        self.character_form = '0'
+        self.transformation_index = 0
+
+        # transformations
+        self.form = list(FORMS_LIST.keys())[self.transformation_index]
+        self.can_switch_form = True
+        self.form_switch_time = None
+        
         self.animations = {}
 
-        self.image = pygame.image.load(CHARACTER_IMAGES['image']).convert_alpha()
+        self.image = pygame.image.load(INITIAL_IMAGE['image']).convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
         self.hitbox = self.rect.inflate(-6,HITBOX_OFFSET[PLAYER])
 
@@ -54,6 +60,12 @@ class Player(Entity):
         self.magic = list(MAGIC_LIST.keys())[self.magic_index]
         self.can_switch_magic = True
 
+        # bag
+        self.bag_index = 0
+        self.bag = list(BAG_LIST.keys())[self.bag_index]
+        self.can_switch_bag = True
+        self.bag_switch_time = None
+
         # switch cooldown
         self.switch_duration_cooldown = 200
         self.magic_switch_time = None
@@ -68,22 +80,21 @@ class Player(Entity):
         self.key_delay = 150
         
     def change_character_form(self, form_version):
-        self.character_form = form_version  # '0', '1', etc.
+        self.transformation_index = form_version  # '0', '1', etc.
         self.import_player_assets()
 
     def import_player_assets(self):
         # add puffing particles
-        character_folder = f'../graphics/player/{self.character_form}/'
+        character_folder = f'../graphics/player/{str(self.transformation_index)}/'
         self.animations = {animat: import_folder(character_folder + animat) for animat in CHARACTER_ANIMATIONS}
     
-    def detect_keypress_rhythm(self, keys, valid_keys, addicional_time):
+    def detect_code_keypress(self, keys, valid_keys, addicional_time):
         current_time = pygame.time.get_ticks()
         if current_time - self.last_key_time - addicional_time > self.key_delay:
-            for key in valid_keys:
-                if keys[key]:
-                    self.last_key_time = current_time
-                    return key
-        return None
+            if all(keys[key] for key in valid_keys):
+                self.last_key_time = current_time
+                return True
+        return False
     
     def input(self):
         if not self.can_attack: # or self.talking or self.transforming or self.grabbing):
@@ -125,8 +136,30 @@ class Player(Entity):
 
                 self.create_magic(style,strength,cost)
 
+            # Switch form input
+            if keys[pygame.K_1] and self.can_switch_form:
+                self.can_switch_form = False
+                self.form_switch_time = pygame.time.get_ticks()
+
+                if self.transformation_index < len(list(FORMS_LIST.keys())) -1:
+                    self.transformation_index += 1
+                else:
+                    self.transformation_index = 0
+                self.form = list(FORMS_LIST.keys())[self.transformation_index]
+
+            # Switch bag input
+            if keys[pygame.K_2] and self.can_switch_bag:
+                self.can_switch_bag = False
+                self.bag_switch_time = pygame.time.get_ticks()
+
+                if self.bag_index < len(list(BAG_LIST.keys())) -1:
+                    self.bag_index += 1
+                else:
+                    self.bag_index = 0
+                self.bag = list(BAG_LIST.keys())[self.bag_index]
+
             # Switch weapon input
-            if keys[pygame.K_q] and self.can_switch_weapon:
+            if keys[pygame.K_3] and self.can_switch_weapon:
                 self.can_switch_weapon = False
                 self.weapon_switch_time = pygame.time.get_ticks()
 
@@ -137,7 +170,7 @@ class Player(Entity):
                 self.weapon = list(WEAPONS_LIST.keys())[self.weapon_index]
 
             # Switch magic input
-            if keys[pygame.K_e] and self.can_switch_magic:
+            if keys[pygame.K_4] and self.can_switch_magic:
                 self.can_switch_magic = False
                 self.magic_switch_time = pygame.time.get_ticks()
 
@@ -146,12 +179,12 @@ class Player(Entity):
                 else:
                     self.magic_index = 0
                 self.magic = list(MAGIC_LIST.keys())[self.magic_index]
+
             
             # Master Mode On/Off
                 # adjust the debug easter egg of hacker on and off to linger more on screen
             master_keys = {pygame.K_p, pygame.K_o, pygame.K_r, pygame.K_k}
-            selected_key = self.detect_keypress_rhythm(keys, master_keys,50)
-            if selected_key:
+            if self.detect_code_keypress(keys, master_keys,50):
                 self.dm_mode = not self.dm_mode
 
                 debug_x = WIDTH*0.5 - 64
@@ -191,14 +224,6 @@ class Player(Entity):
             if keys[pygame.K_i]:
                 pass
 
-            # Choose Form   ---> configure later
-            form_keys = {pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4}
-            selected_key = self.detect_keypress_rhythm(keys, form_keys,0)
-            if selected_key and not self.transforming:
-                selected_form = selected_key - pygame.K_0
-                # implement change form
-                print(selected_form)
-
             # transform   ---> configure later
             if keys[pygame.K_t] and not self.transforming:
                 self.transforming = True
@@ -234,6 +259,16 @@ class Player(Entity):
             if current_time - self.attack_time >= self.attack_cooldown + WEAPONS_LIST[self.weapon]['cooldown']:
                 self.can_attack = False
                 self.destoy_attack()
+
+        # switching form setups
+        if not self.can_switch_form:
+            if current_time - self.form_switch_time >= self.switch_duration_cooldown:
+                self.can_switch_form = True
+
+        # switching bag setups
+        if not self.can_switch_bag:
+            if current_time - self.bag_switch_time >= self.switch_duration_cooldown:
+                self.can_switch_bag = True
 
         # switching weapons setups
         if not self.can_switch_weapon:

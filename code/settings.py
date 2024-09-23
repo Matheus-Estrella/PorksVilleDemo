@@ -17,7 +17,7 @@ HITBOX_OFFSET = {
 
 # -------------------------------------------------| GAME SOUNDS |-------------------------------------------------
 
-GENERAL_SOUND_ADJUST = 0.1
+GENERAL_SOUND_ADJUST = 0.4
 GAME_SOUNDS = {
     'main' : {'path':'../audio/main.ogg','volume':0.75*GENERAL_SOUND_ADJUST},
     'weapon':{'path':'../audio/sword.wav','volume':0.25*GENERAL_SOUND_ADJUST}
@@ -53,7 +53,14 @@ LEVEL_IMAGES = { # 'level' : {level images}
 
 # character images
 
-CHARACTER_IMAGES = {'image':'../graphics/test/rock.png','folder':'../graphics/player/'}
+FORMS_LIST = { # {} are further implementations of differents settings for each form, if necessary
+    0 : {},
+    1 : {},
+    2 : {},
+    3 : {},
+}
+
+INITIAL_IMAGE = {'image':'../graphics/test/rock.png'}
 
 CHARACTER_ANIMATIONS = ['up', 'down', 'left', 'right', 
                         'up_idle', 'down_idle', 'left_idle', 'right_idle',
@@ -107,7 +114,7 @@ WEAPONS_LIST = {
     'sai': {'cooldown':100,'damage':15,'graphic':'../graphics/weapons/sai/full.png','accessible':True}
 }
 
-# -------------------------------------------------| INTERACTIONS SETTINGS |-------------------------------------------------
+# -------------------------------------------------| INTERACTIONS AND ITEMS SETTINGS |-------------------------------------------------
 
 # for further implementations of interactible objects on map to check isn't interaction type
 INTERACTIONS_MAPPING = {
@@ -123,18 +130,19 @@ INTERACTIONS_MAPPING = {
 'money' = for itens that grants money
 'weapon' = for itens that grants a new weapon on list
 'magic' = for itens that can cast a magic on it
-'' = for itens that 
+'scenario' = for itens that can't be stored but can be interactible by other ways
 
 '''
 
 OBJECTS_LIST = {
     0:{'id':'1000','name':'dying_totem','quantity':3,'sprite_type':'totem',
-       'talkable': False,'collectable': True,'grabbable': False,'equipped':False,'consumable': True,
+       'talkable': False,'grabbable': False,'consumable': True,
+       'collectable': True,'equippable':False,
        'sellable': False, 'value': 'The life has not a price',
        'life_time':60,'health':100,
-       'upgrade':'respawn','reward':1,
        'fading':4,
-       'can_shift': False
+       'can_shift': False,
+       'upgrade':'respawn','reward':1
        }
 }
 '''
@@ -146,7 +154,7 @@ obects list index = used for references directly the item that should appear
 'sprite_type': used for ocasional special interactions and animations or references for the item type
     should also be used for references the images folder as: graphics->special_objects->{sprite_type}
 
-INTERACTIONS_TYPES = 'talkable','collectable','grabbable','equipped','consumable', 'sellable' and etc
+INTERACTIONS_TYPES = 'talkable','collectable','grabbable','equippable','consumable', 'sellable' and etc
     define the kinds of interactions that that object can provide
 
 'life_time': seconds that the item lingers on the map
@@ -162,6 +170,48 @@ INTERACTIONS_TYPES = 'talkable','collectable','grabbable','equipped','consumable
 or by interaction (for itens that can manifest and animation on interactions)
 
 '''
+# -------------------------------------------------| BAG SETTINGS |-------------------------------------------------
+
+BAG_LIST = {
+    0:{'id':'1000','name':'dying_totem','quantity':3,'sprite_type':'totem',
+       'talkable': False,'grabbable': False,'consumable': True,
+       'collectable': True,'equippable':False,
+       'sellable': False, 'value': 'The life has not a price',
+       'life_time':60,'health':100,
+       'fading':4,
+       'can_shift': False,
+       'upgrade':'respawn','reward':1
+       },
+    1:{'id':'1000','name':'test1','quantity':3,'sprite_type':'totem',
+       'talkable': False,'grabbable': False,'consumable': True,
+       'collectable': True,'equippable':False,
+       'sellable': False, 'value': 'The life has not a price',
+       'life_time':60,'health':100,
+       'fading':4,
+       'can_shift': False,
+       'upgrade':'respawn','reward':1
+       },
+    2:{'id':'1000','name':'test2','quantity':3,'sprite_type':'totem',
+       'talkable': False,'grabbable': False,'consumable': True,
+       'collectable': True,'equippable':False,
+       'sellable': False, 'value': 'The life has not a price',
+       'life_time':60,'health':100,
+       'fading':4,
+       'can_shift': False,
+       'upgrade':'respawn','reward':1
+       },
+    3:{'id':'1000','name':'test3','quantity':3,'sprite_type':'totem',
+       'talkable': False,'grabbable': False,'consumable': True,
+       'collectable': True,'equippable':False,
+       'sellable': False, 'value': 'The life has not a price',
+       'life_time':60,'health':100,
+       'fading':4,
+       'can_shift': False,
+       'upgrade':'respawn','reward':1
+       }
+       
+       }
+
 
 # -------------------------------------------------| ENEMIES AND NPCS SETTINGS |-------------------------------------------------
 
