@@ -1,6 +1,6 @@
 # Porksville - Demo
 
-### Project iniciative by João Romão and Matheus Estrella
+### Project iniciative by Matheus Estrella, João Romão, Victor Oliveira, Maria Eduarda Souza e Leonardo Caseri
 
 ![PorksVille Logo](./conception_arts/PorksVille_Logo.jpg)
 
@@ -9,8 +9,39 @@
 
 This is the brave hero to be developed in the game.
 
-![Main Character](./conception_arts/buriti_down.jpg)
-![Main Character Bitting](./conception_arts/buriti_down_attack.jpg)
+![Down_Idle](./Frontend/New Characters/Buriti/idle_down.png)
+![Attack_down](./Frontend/New Characters/Buriti/attack_down.png)
+![Down_0](./Frontend/New Characters/Buriti/down_0.png)
+![Down_0](./Frontend/New Characters/Buriti/down_0.png)
+![Down_1](./Frontend/New Characters/Buriti/down_1.png)
+![Down_2](./Frontend/New Characters/Buriti/down_2.png)
+![Down_3](./Frontend/New Characters/Buriti/down_3.png)
+![Up_Idle](./Frontend/New Characters/Buriti/idle_up.png)
+![Attack_up](./Frontend/New Characters/Buriti/attack_up.png)
+![Up_0](./Frontend/New Characters/Buriti/up_0.png)
+![Up_0](./Frontend/New Characters/Buriti/up_0.png)
+![Up_1](./Frontend/New Characters/Buriti/up_1.png)
+![Up_2](./Frontend/New Characters/Buriti/up_2.png)
+![Up_3](./Frontend/New Characters/Buriti/up_3.png)
+![Down_Idle](./Frontend/New Characters/Buriti/idle_down.png)
+![Down_Idle](./Frontend/New Characters/Buriti/idle_down.png)
+
+
+## Ambient Objetcs
+
+This are the native weapons inspired for the game
+
+![Lança](./Frontend/New Weapons/lanca/full.png)
+![Bordura](./Frontend/New Weapons/bordura/full.png)
+![Tacape](./Frontend/New Weapons/tacape/full.png)
+![Coronha](./Frontend/New Weapons/coronha/full.png)
+
+When Buriti saves the elemental from a Pork henchman, they are updraged to this weapons
+
+![Lança_Up](./Frontend/New Weapons/lanca/full_up.png)
+![Bordura_Up](./Frontend/New Weapons/bordura/full_up.png)
+![Tacape_Up](./Frontend/New Weapons/tacape/full_up.png)
+![Coronha_Up](./Frontend/New Weapons/coronha/full_up.png)
 
 
 ## Screen Images
