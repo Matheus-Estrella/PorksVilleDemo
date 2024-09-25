@@ -32,14 +32,14 @@ This is the brave hero to be developed in the game.
 This are the native weapons inspired for the game
 
 ![Lança](./Frontend/New_Weapons/lanca/full.png)
-![Bordura](./Frontend/New_Weapons/bordura/full.png)
+![Borduna](./Frontend/New_Weapons/borduna/full.png)
 ![Tacape](./Frontend/New_Weapons/tacape/full.png)
 ![Coronha](./Frontend/New_Weapons/coronha/full.png)
 
 When Buriti saves the elemental from a Pork henchman, they are updraged to this weapons
 
 ![Lança_Up](./Frontend/New_Weapons/lanca/full_up.png)
-![Bordura_Up](./Frontend/New_Weapons/bordura/full_up.png)
+![Borduna_Up](./Frontend/New_Weapons/borduna/full_up.png)
 ![Tacape_Up](./Frontend/New_Weapons/tacape/full_up.png)
 ![Coronha_Up](./Frontend/New_Weapons/coronha/full_up.png)
 
