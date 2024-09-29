@@ -2,45 +2,36 @@ import pygame
 from support import import_folder
 #from settings import *
 from random import choice
-from settings import ENTITY_MAPPING, MAGIC_LIST,ATTACK_TYPE,ATTACK_PARTICLES
+from settings import ENTITY_MAPPING, MAGIC_LIST,ATTACK_TYPE,ATTACK_PARTICLES,FADING_PARTICLES
 
 class AnimationPlayer:
     def __init__(self):
-        self.frames = {
-            # magic
-            MAGIC_LIST[str(0)]['magic_name']: import_folder(MAGIC_LIST[str(0)]['graphic_folder']),
-            MAGIC_LIST[str(1)]['magic_name']: import_folder(MAGIC_LIST[str(1)]['graphic_folder']),
-            MAGIC_LIST[str(1)]['sub_magic_name']: import_folder(MAGIC_LIST[str(1)]['sub_graphic_folder']),
-            
-            # attacks 
-            ATTACK_TYPE[0]: import_folder(ATTACK_PARTICLES[ATTACK_TYPE[0]]),
-            ATTACK_TYPE[1]: import_folder(ATTACK_PARTICLES[ATTACK_TYPE[1]]),
-            ATTACK_TYPE[2]: import_folder(ATTACK_PARTICLES[ATTACK_TYPE[2]]),
-            ATTACK_TYPE[3]: import_folder(ATTACK_PARTICLES[ATTACK_TYPE[3]]),
-            ATTACK_TYPE[4]: import_folder(ATTACK_PARTICLES[ATTACK_TYPE[4]]),
+        
+        self.frames = {}
 
-            # monster deaths
-            ENTITY_MAPPING[1]['name']: import_folder(ENTITY_MAPPING[1]['dying_folder']),
-            ENTITY_MAPPING[2]['name']: import_folder(ENTITY_MAPPING[2]['dying_folder']),
-            ENTITY_MAPPING[3]['name']: import_folder(ENTITY_MAPPING[3]['dying_folder']),
-            ENTITY_MAPPING[4]['name']: import_folder(ENTITY_MAPPING[4]['dying_folder']),
+        # magic particles
+        for key in MAGIC_LIST.keys():
+            self.frames[MAGIC_LIST[key]['magic_name']] = import_folder(MAGIC_LIST[key]['graphic_folder'])
             
-            # fading leafs 
-            'leaf': (
-                import_folder('../graphics/particles/leaf1'),
-                import_folder('../graphics/particles/leaf2'),
-                import_folder('../graphics/particles/leaf3'),
-                import_folder('../graphics/particles/leaf4'),
-                import_folder('../graphics/particles/leaf5'),
-                import_folder('../graphics/particles/leaf6'),
-                self.reflect_images(import_folder('../graphics/particles/leaf1')),
-                self.reflect_images(import_folder('../graphics/particles/leaf2')),
-                self.reflect_images(import_folder('../graphics/particles/leaf3')),
-                self.reflect_images(import_folder('../graphics/particles/leaf4')),
-                self.reflect_images(import_folder('../graphics/particles/leaf5')),
-                self.reflect_images(import_folder('../graphics/particles/leaf6'))
-            )
-        }
+            if MAGIC_LIST[key]['sub_magic_name'] is not None:
+                self.frames[MAGIC_LIST[key]['sub_magic_name']] = import_folder(MAGIC_LIST[key]['sub_graphic_folder'])
+
+        # attacks
+        for num in range(len(ATTACK_TYPE)):
+            self.frames[ATTACK_TYPE[num]] = import_folder(ATTACK_PARTICLES[ATTACK_TYPE[num]])
+
+        # entity deaths
+        for num in range(len(ENTITY_MAPPING)):
+            self.frames[ENTITY_MAPPING[num]['name']] = import_folder(ENTITY_MAPPING[num]['dying_folder'])
+
+        # fading particles
+        for particle_type in FADING_PARTICLES:
+            self.frames[particle_type] = []
+            folder_path = FADING_PARTICLES[particle_type]['folder']
+            for num in range(*FADING_PARTICLES[particle_type]['range']):
+                self.frames[particle_type].append(import_folder(f'{folder_path}{num}'))
+                # to mirror particles
+                self.frames[particle_type].append(self.reflect_images(import_folder(f'{folder_path}{num}')))
 
     def reflect_images(self, frames):
         new_frames = []
@@ -49,10 +40,18 @@ class AnimationPlayer:
             new_frames.append(flipped_frame)
         return new_frames
     
-    def create_fading_particles(self,pos,groups):
-        animation_frames = choice(self.frames['leaf'])
-        ParticleEffect(pos,animation_frames,groups)
-        
+    def create_fading_particles(self,pos,groups,level_number,id):
+        # Apply all fading particles for the specified level numbers
+        for particles in FADING_PARTICLES:
+            # Check if the level is in the list of allowed level numbers
+            for level_check in FADING_PARTICLES[particles]['level_numbers']:
+                if level_check == level_number:
+                    # Check if the id is in the list of allowed ids
+                    for check_id in FADING_PARTICLES[particles]['ids']:
+                        if check_id == int(id):
+                            animation_frames = choice(self.frames[particles])
+                            ParticleEffect(pos, animation_frames, groups)
+            
     def create_particles(self,animation_type,pos,groups):
             animation_frames = self.frames[animation_type]
             ParticleEffect(pos,animation_frames,groups)

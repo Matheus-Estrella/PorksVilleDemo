@@ -1,5 +1,5 @@
 import pygame
-from settings import MAGIC_LIST,WEAPONS_LIST,UI_SETTINGS,COLORS_SETTINGS,BAG_LIST,FORMS_LIST
+from settings import MAGIC_LIST,WEAPONS_LIST,UI_SETTINGS,COLORS_SETTINGS,BAG_LIST,FORMS_LIST,CHARACTER_FOLDER,ITEMS_FOLDER
 
 class UI:
     def __init__(self):
@@ -32,14 +32,14 @@ class UI:
         # convert bag dictionary
         self.bag_graphics =[]
         for bag in BAG_LIST.values():
-            path = f'../graphics/items/{bag["name"]}/{bag["name"]}.png'
+            path = f'{ITEMS_FOLDER}{bag["name"]}/{bag["name"]}.png'
             bag = pygame.image.load(path).convert_alpha()
             self.bag_graphics.append(bag)
 
         # convert form dictionary
         self.transformation_graphics = []
         for form_index in FORMS_LIST.keys():
-            path = f'../graphics/player/{form_index}/icon_form/icon.png'
+            path = f'{CHARACTER_FOLDER}{form_index}/icon_form/icon.png'
             form_image = pygame.image.load(path).convert_alpha()
             self.transformation_graphics.append(form_image)
 
@@ -87,8 +87,8 @@ class UI:
 
         magic = [max_x,min_y]
         weapon = [max_x,min_y-jump*1]
-        bag = [max_x,min_y-jump*2]
-        transformation = [max_x,min_y-jump*3]
+        bag = [max_x+1000,min_y-jump*2+1000,] # +1000 to stay out of the map
+        transformation = [max_x+1000,min_y-jump*3+1000,] # +1000 to stay out of the map
 
         return {
         'transformation': transformation,

@@ -1,6 +1,6 @@
 import pygame
 from entity import Entity
-from support import *
+from support import import_folder
 from settings import MONSTER_DATA, MONSTER_SETTINGS
 
 class Enemy(Entity):
@@ -132,6 +132,7 @@ class Enemy(Entity):
         self.cooldown()
         self.check_death()
 
+    # this is like a interaction system with the player
     def enemy_update(self,player):
         self.get_status(player)
         self.actions(player)

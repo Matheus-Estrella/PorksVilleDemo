@@ -1,7 +1,12 @@
-import pygame,sys
+import pygame,sys, os
 from debug import Debug
 from level import Level
 from settings import GAME_SOUNDS,FPS,WIDTH,HEIGHT,COLORS_SETTINGS
+
+dirpath = os.getcwd
+sys.path.append(dirpath)
+if getattr(sys,"frozen",False):
+    os.chdir(sys._MEIPASS)
 
 class Game:
     def __init__(self):
@@ -26,7 +31,13 @@ class Game:
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_m:
-                        self.level.toggle_menu()
+                        self.level.pause_game_menu()
+                    # others ifs for others menu types
+            
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_LCTRL] and keys[pygame.K_w]:
+                pygame.quit()
+                sys.exit()
 
             self.screen.fill(COLORS_SETTINGS['water_color'])
             self.level.run()

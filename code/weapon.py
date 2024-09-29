@@ -1,4 +1,5 @@
 import pygame
+from settings import WEAPONS_FOLDER
 from debug import Debug
 
 class Weapon(pygame.sprite.Sprite):
@@ -9,7 +10,7 @@ class Weapon(pygame.sprite.Sprite):
 
 
         # graphic
-        full_path = f'../graphics/weapons/{player.weapon}/{direction}.png'
+        full_path = f'{WEAPONS_FOLDER}{player.weapon}/{direction}.png'
         self.image = pygame.image.load(full_path).convert_alpha()
 
         # placement

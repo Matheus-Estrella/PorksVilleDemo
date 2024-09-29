@@ -12,7 +12,7 @@ from magics import MagicPlayer
 from upgrade import Upgrade
 
 from termsSettings import *
-from settings import LEVEL_IMAGES,ENTITY_MAPPING, MAGIC_LIST,INTERACTIONS_MAPPING, TILESIZE
+from settings import LEVEL_IMAGES,ENTITY_MAPPING, MAGIC_LIST,INTERACTIONS_MAPPING, TILESIZE,FADING_PARTICLES
 
 class Level:
     def __init__(self):
@@ -44,18 +44,28 @@ class Level:
         self.magic_player = MagicPlayer(self.animation_player)
 
     def create_map(self):
+
         layouts = {
             BOUNDARY: import_csv_layout(LEVEL_IMAGES[str(self.level_number)][BOUNDARY]),
-            PROP : import_csv_layout(LEVEL_IMAGES[str(self.level_number)][PROP]),
+            #PROP : import_csv_layout(LEVEL_IMAGES[str(self.level_number)][PROP]),
             LARGE_OBJECTS : import_csv_layout(LEVEL_IMAGES[str(self.level_number)][LARGE_OBJECTS]),
             ENTITY : import_csv_layout(LEVEL_IMAGES[str(self.level_number)][ENTITY])
         }
         
         graphics = {
-            PROP : import_folder(LEVEL_IMAGES[str(self.level_number)][GRAPHIC_PROP]),
+            #PROP : import_folder(LEVEL_IMAGES[str(self.level_number)][GRAPHIC_PROP]),
             LARGE_OBJECTS : import_folder(LEVEL_IMAGES[str(self.level_number)][GRAPHIC_OBJECTS])
         }
-        
+
+        #setting props
+        self.props_list = []
+        for prop_key, prop_value in FADING_PARTICLES.items():
+            if self.level_number in prop_value['level_numbers']:
+                layouts[prop_key] = import_csv_layout(prop_value['csv_folder'])
+                graphics[prop_key] = import_folder(prop_value['graphic_prop'])
+                self.props_list.append(prop_key)
+
+
         for style,layout in layouts.items():
             for row_index,row in enumerate(layout):
                 for col_index,col in enumerate (row):
@@ -64,12 +74,9 @@ class Level:
                         y = row_index * TILESIZE
                         if style == INTERACTIONS_MAPPING[0]['name']:
                             Tile((x,y),col,[self.obstacles_sprites],INTERACTIONS_MAPPING[0]['name'])
-                        if style == PROP:
-                            random_props_image = choice(graphics[PROP])
-                            Tile((x,y),col,
-                                 [self.visible_sprites,self.obstacles_sprites,self.attackable_sprites],
-                                 PROP,random_props_image)
+                            
                         if style == LARGE_OBJECTS:
+                            #getting the image
                             surf = graphics[LARGE_OBJECTS][int(col)]
                             Tile((x,y),col,[self.visible_sprites,self.obstacles_sprites],LARGE_OBJECTS,surf)
                         if style == ENTITY:
@@ -106,7 +113,20 @@ class Level:
                                         self.add_exp) 
                                 else: 
                                     # further implementations for NPC class (or others)
-                                    pass           
+                                    pass
+
+                        # if style in self.props_list:
+                        #     random_props_image = choice(graphics[style])
+                        #     Tile((x,y),col,
+                        #          [self.visible_sprites,self.obstacles_sprites,self.attackable_sprites],
+                        #          style,random_props_image)
+                        
+                        if style in self.props_list:
+                            random_props_image = choice(graphics[style])
+                            Tile((x,y),col,
+                                 [self.visible_sprites,self.obstacles_sprites,self.attackable_sprites],
+                                 style,random_props_image)
+
 
     def create_attack(self):
         self.current_attack = Weapon(self.player,[self.visible_sprites,self.attack_sprites])
@@ -132,14 +152,23 @@ class Level:
                 collision_sprites = pygame.sprite.spritecollide(attack_sprite,self.attackable_sprites,False)
                 if collision_sprites:
                     for target_sprite in collision_sprites:
-                        if target_sprite.sprite_type == PROP:
+                        # if is an attackable scenario sprite
+                        if target_sprite.sprite_type in self.props_list:
                             pos = target_sprite.rect.center
                             offset = pygame.math.Vector2(0,75)
                             for fading in range(randint(3,6)):
-                                self.animation_player.create_fading_particles(pos - offset,[self.visible_sprites])
+                                # TEST IF WORKS WITH ANOTHERS FADINGS ON THE FUNCTION
+                                self.animation_player.create_fading_particles(pos - offset,[self.visible_sprites],self.level_number, target_sprite.sprite_id)
                             target_sprite.kill()
+                        # if is an enemy
                         elif target_sprite.sprite_type == ENEMY:
                             target_sprite.get_damage(self.player,attack_sprite.sprite_type)
+                        # if is an npc
+                        elif target_sprite.sprite_type == NPC:
+                            pass
+                        # if is an large_objet
+                        elif target_sprite.sprite_type == LARGE_OBJECTS:
+                            pass
 
     def damage_player(self,amount,attack_type):
         if self.player.vulnerable:
@@ -155,9 +184,8 @@ class Level:
     def add_exp(self,amount):
         self.player.exp += amount
 
-    def toggle_menu(self):
+    def pause_game_menu(self):
         self.game_paused = not self.game_paused
-        pass
 
     def run(self):
         
@@ -204,7 +232,7 @@ class YSortCameraGroup(pygame.sprite.Group):
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image, offset_pos)
     
-    def enemy_update(self,player):
+    def enemy_update(self,player): # update all enemies with the current player position
         enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite,'sprite_type') and sprite.sprite_type == 'enemy']
         for enemy in enemy_sprites:
             enemy.enemy_update(player)

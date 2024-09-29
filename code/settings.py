@@ -11,7 +11,8 @@ TILESIZE = 64
 HITBOX_OFFSET = {
     PLAYER: -26,
     LARGE_OBJECTS: -40,
-    PROP : -10,
+    'leaf' : -10,
+    'snow' : -10,
     BOUNDARY : 0
 }
 
@@ -19,8 +20,8 @@ HITBOX_OFFSET = {
 
 GENERAL_SOUND_ADJUST = 0.4
 GAME_SOUNDS = {
-    'main' : {'path':'../audio/main.ogg','volume':0.75*GENERAL_SOUND_ADJUST},
-    'weapon':{'path':'../audio/sword.wav','volume':0.25*GENERAL_SOUND_ADJUST}
+    'main' : {'path':'../code/audio/main.ogg','volume':0.75*GENERAL_SOUND_ADJUST},
+    'weapon':{'path':'../code/audio/sword.wav','volume':0.25*GENERAL_SOUND_ADJUST}
 }
 
 # -------------------------------------------------| MAPPING IMAGES |-------------------------------------------------
@@ -28,26 +29,35 @@ GAME_SOUNDS = {
 # Level Images and  Map sources
 LEVEL_IMAGES = { # 'level' : {level images}
     '0':{
-        BACKGROUND:'../graphics/tilemap/ground.png',
-        BOUNDARY:'../map/map_FloorBlocks.csv',
-        PROP:'../map/map_Grass.csv',
-        LARGE_OBJECTS:'../map/map_Objects.csv',
-        ENTITY:'../map/map_Entities.csv',
+        BACKGROUND:'../code/graphics/tilemap/ground.png',
+        BOUNDARY:'../code/map/map_FloorBlocks.csv',
+        LARGE_OBJECTS:'../code/map/map_Objects.csv',
+        ENTITY:'../code/map/map_Entities.csv',
         # Background Components sources
-        GRAPHIC_PROP:'../graphics/grass',
-        GRAPHIC_OBJECTS:'../graphics/objects'
+        GRAPHIC_PROP:'../code/graphics/grass',
+        GRAPHIC_OBJECTS:'../code/graphics/objects'
         },
     '1':{
-        BACKGROUND:'../graphics/tilemap/ground.png',
-        BOUNDARY:'../map/map_FloorBlocks.csv',
-        PROP:'../map/map_Grass.csv',
-        LARGE_OBJECTS:'../map/map_Objects.csv',
-        ENTITY:'../map/map_Entities.csv',
+        BACKGROUND:'../code/graphics/tilemap/ground.png',
+        BOUNDARY:'../code/map/map_FloorBlocks.csv',
+        LARGE_OBJECTS:'../code/map/map_Objects.csv',
+        ENTITY:'../code/map/map_Entities.csv',
         # Background Components sources
-        GRAPHIC_PROP:'../graphics/grass',
-        GRAPHIC_OBJECTS:'../graphics/objects'
+        GRAPHIC_PROP:'../code/graphics/grass',
+        GRAPHIC_OBJECTS:'../code/graphics/objects'
         },
     }
+# -------------------------------------------------| CHARACTER SETTINGS |-------------------------------------------------
+
+FADING_PARTICLES = {
+    'leaf' :{
+        'folder':'../code/graphics/particles/leaf',
+        'graphic_prop':'../code/graphics/Grass',
+        'csv_folder' : '../code/map/map_Grass.csv',
+        'range':[1,7],
+        'level_numbers':[0],
+        'ids':[8,9,10]},
+}
 
 # -------------------------------------------------| CHARACTER SETTINGS |-------------------------------------------------
 
@@ -60,7 +70,9 @@ FORMS_LIST = { # {} are further implementations of differents settings for each 
     3 : {},
 }
 
-INITIAL_IMAGE = {'image':'../graphics/test/rock.png'}
+INITIAL_IMAGE = {'image':'../code/graphics/test/rock.png'}
+CHARACTER_FOLDER = '../code/graphics/player/'
+
 
 CHARACTER_ANIMATIONS = ['up', 'down', 'left', 'right', 
                         'up_idle', 'down_idle', 'left_idle', 'right_idle',
@@ -83,11 +95,11 @@ MAGIC_LIST = {
          'magic_particle':'fire',
          'strength':75,
          'cost':15,
-         'attack_amount':10,
-         'graphic':'../graphics/particles/flame/fire.png',
-         'graphic_folder':'../graphics/particles/flame/frames',
+         'attack_amount':6,
+         'graphic':'../code/graphics/particles/flame/fire.png',
+         'graphic_folder':'../code/graphics/particles/flame/frames',
          'sub_graphic_folder':None,
-         'sound_folder':'../audio/Fire.wav',
+         'sound_folder':'../code/audio/Fire.wav',
          'volume':0.3*GENERAL_SOUND_ADJUST
          },
     '1':{'magic_name':'heal',
@@ -96,22 +108,26 @@ MAGIC_LIST = {
          'strength':10,
          'cost':5,
          'attack_amount':1,
-         'graphic':'../graphics/particles/heal/heal.png',
-         'graphic_folder':'../graphics/particles/heal/frames',
-         'sub_graphic_folder':'../graphics/particles/aura',
-         'sound_folder':'../audio/heal.wav',
+         'graphic':'../code/graphics/particles/heal/heal.png',
+         'graphic_folder':'../code/graphics/particles/heal/frames',
+         'sub_graphic_folder':'../code/graphics/particles/aura',
+         'sound_folder':'../code/audio/heal.wav',
          'volume':0.3*GENERAL_SOUND_ADJUST
          }
 }
 
 # weapons
-
+WEAPONS_FOLDER = '../code/graphics/weapons/'
 WEAPONS_LIST = {
-    'sword':{'cooldown':100,'damage':15,'graphic':'../graphics/weapons/sword/full.png','accessible':True},
-    'lance' : {'cooldown':100,'damage':15,'graphic':'../graphics/weapons/lance/full.png','accessible':True},
-    'axe' : {'cooldown':100,'damage':15,'graphic':'../graphics/weapons/axe/full.png','accessible':True},
-    'rapier' : {'cooldown':100,'damage':15,'graphic':'../graphics/weapons/rapier/full.png','accessible':True},
-    'sai': {'cooldown':100,'damage':15,'graphic':'../graphics/weapons/sai/full.png','accessible':True}
+    'sword':{'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/sword/full.png','accessible':True},
+    'lance' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/lance/full.png','accessible':True},
+    'axe' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/axe/full.png','accessible':True},
+    'rapier' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/rapier/full.png','accessible':True},
+    'sai': {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/sai/full.png','accessible':True},
+    'borduna':{'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/borduna/full.png','accessible':True},
+    'coronha' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/coronha/full.png','accessible':True},
+    'lanca' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/lanca/full.png','accessible':True},
+    'tacape' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/tacape/full.png','accessible':True},
 }
 
 # -------------------------------------------------| INTERACTIONS AND ITEMS SETTINGS |-------------------------------------------------
@@ -133,7 +149,7 @@ INTERACTIONS_MAPPING = {
 'scenario' = for itens that can't be stored but can be interactible by other ways
 
 '''
-
+ITEMS_FOLDER = '../code/graphics/items/'
 OBJECTS_LIST = {
     0:{'id':'1000','name':'dying_totem','quantity':3,'sprite_type':'totem',
        'talkable': False,'grabbable': False,'consumable': True,
@@ -215,36 +231,36 @@ BAG_LIST = {
 
 # -------------------------------------------------| ENEMIES AND NPCS SETTINGS |-------------------------------------------------
 
-MONSTER_SETTINGS = {'folder':'../graphics/monsters/',
-                    'hit_sound':'../audio/hit.wav',
+MONSTER_SETTINGS = {'folder':'../code/graphics/monsters/',
+                    'hit_sound':'../code/audio/hit.wav',
                     'hit_sound_volume':0.35*GENERAL_SOUND_ADJUST,
                     'monster_attack_sound_volume': 0.30*GENERAL_SOUND_ADJUST,
-                    'death_sound':'../audio/death.wav',
+                    'death_sound':'../code/audio/death.wav',
                     'death_sound_volume':0.30*GENERAL_SOUND_ADJUST}
 
 ENTITY_MAPPING = {
-    0:{'id':'394','name':'player','entity_type':PLAYER,'dying_folder':'../graphics/particles/smoke_orange'},
-    1:{'id':'393','name':'squid','entity_type':ENEMY,'dying_folder':'../graphics/particles/smoke_orange'},
-    2:{'id':'392','name':'raccoon','entity_type':ENEMY,'dying_folder':'../graphics/particles/raccoon'},
-    3:{'id':'391','name':'spirit','entity_type':ENEMY,'dying_folder':'../graphics/particles/nova'},
-    4:{'id':'390','name':'bamboo','entity_type':ENEMY,'dying_folder':'../graphics/particles/bamboo'}
+    0:{'id':'394','name':'player','entity_type':PLAYER,'dying_folder':'../code/graphics/particles/smoke_orange'},
+    1:{'id':'393','name':'squid','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/smoke_orange'},
+    2:{'id':'392','name':'raccoon','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/raccoon'},
+    3:{'id':'391','name':'spirit','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/nova'},
+    4:{'id':'390','name':'bamboo','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/bamboo'}
 }
 
 ATTACK_TYPE = ['slash','claw','thunder','leaf_attack','sparkle']
 
 ATTACK_SOUND = {
-    ATTACK_TYPE[0] :'../audio/attack/slash.wav',
-    ATTACK_TYPE[1] :'../audio/attack/claw.wav',
-    ATTACK_TYPE[2] :'../audio/attack/fireball.wav',
-    ATTACK_TYPE[3] :'../audio/attack/slash.wav',
+    ATTACK_TYPE[0] :'../code/audio/attack/slash.wav',
+    ATTACK_TYPE[1] :'../code/audio/attack/claw.wav',
+    ATTACK_TYPE[2] :'../code/audio/attack/fireball.wav',
+    ATTACK_TYPE[3] :'../code/audio/attack/slash.wav',
 }
 
 ATTACK_PARTICLES = {
-    ATTACK_TYPE[0] :'../graphics/particles/slash',
-    ATTACK_TYPE[1] :'../graphics/particles/claw',
-    ATTACK_TYPE[2] :'../graphics/particles/thunder',
-    ATTACK_TYPE[3] :'../graphics/particles/leaf_attack',
-    ATTACK_TYPE[4] :'../graphics/particles/sparkle',
+    ATTACK_TYPE[0] :'../code/graphics/particles/slash',
+    ATTACK_TYPE[1] :'../code/graphics/particles/claw',
+    ATTACK_TYPE[2] :'../code/graphics/particles/thunder',
+    ATTACK_TYPE[3] :'../code/graphics/particles/leaf_attack',
+    ATTACK_TYPE[4] :'../code/graphics/particles/sparkle',
 }
 
 MONSTER_DATA = {
@@ -274,7 +290,7 @@ UI_SETTINGS = {
     'health_bar_width': 200,
     'energy_bar_width': 140,
     # fonts
-    'ui_font' :'../graphics/font/joystix.ttf',
+    'ui_font' :'../code/graphics/font/joystix.ttf',
     'ui_font_size':18,
     'ui_bg_color' : '#222222',
     'ui_border_color' : '#111111',

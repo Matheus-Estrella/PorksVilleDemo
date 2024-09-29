@@ -4,7 +4,7 @@ from support import import_folder
 from entity import Entity
 
 from termsSettings import *
-from settings import HITBOX_OFFSET,BAG_LIST,FORMS_LIST,INITIAL_IMAGE, WEAPONS_LIST,MAGIC_LIST,GAME_SOUNDS,CHARACTER_DATA,CHARACTER_ANIMATIONS,WIDTH, HEIGHT,EASTER_EGG
+from settings import HITBOX_OFFSET,CHARACTER_FOLDER,BAG_LIST,FORMS_LIST,INITIAL_IMAGE, WEAPONS_LIST,MAGIC_LIST,GAME_SOUNDS,CHARACTER_DATA,CHARACTER_ANIMATIONS,WIDTH, HEIGHT,EASTER_EGG
 
 class Player(Entity):
     def __init__(self,sprite_type,pos,sprite_id,groups,obstacle_sprites, create_attack, destroy_attack,create_magic):
@@ -14,7 +14,7 @@ class Player(Entity):
 
         # graphics setup
         self.transforming = False
-        self.transformation_index = 0
+        self.transformation_index = 2
 
         # transformations
         self.form = list(FORMS_LIST.keys())[self.transformation_index]
@@ -85,7 +85,7 @@ class Player(Entity):
 
     def import_player_assets(self):
         # add puffing particles
-        character_folder = f'../graphics/player/{str(self.transformation_index)}/'
+        character_folder = f'{CHARACTER_FOLDER}{str(self.transformation_index)}/'
         self.animations = {animat: import_folder(character_folder + animat) for animat in CHARACTER_ANIMATIONS}
     
     def detect_code_keypress(self, keys, valid_keys, addicional_time):
@@ -238,7 +238,7 @@ class Player(Entity):
         # CONFIGURAR OUTROS STATUS QUE NÃO SEJAM O ATTACKING
         #idle status
         if self.direction.x == 0 and self.direction.y == 0:
-            if not 'idle' in self.status and not 'attack' in self.status:
+            if not 'idle' in self.status and not 'attack' in self.status: #add other types due to new images for interactions
                 self.status = self.status + '_idle'
 
         if self.can_attack:

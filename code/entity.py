@@ -93,6 +93,7 @@ class Entity(pygame.sprite.Sprite):
 
     def collision(self,direction): #for static collisions
         if direction == 'horizontal':
+            #this is how obstacles are defined, avoiding move throught
             for sprite in self.obstacle_sprites:
                 if sprite.hitbox.colliderect(self.hitbox):
                     if self.direction.x >0:
