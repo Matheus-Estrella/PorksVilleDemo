@@ -47,24 +47,21 @@ class Level:
 
         layouts = {
             BOUNDARY: import_csv_layout(LEVEL_IMAGES[str(self.level_number)][BOUNDARY]),
-            #PROP : import_csv_layout(LEVEL_IMAGES[str(self.level_number)][PROP]),
             LARGE_OBJECTS : import_csv_layout(LEVEL_IMAGES[str(self.level_number)][LARGE_OBJECTS]),
             ENTITY : import_csv_layout(LEVEL_IMAGES[str(self.level_number)][ENTITY])
         }
         
         graphics = {
-            #PROP : import_folder(LEVEL_IMAGES[str(self.level_number)][GRAPHIC_PROP]),
             LARGE_OBJECTS : import_folder(LEVEL_IMAGES[str(self.level_number)][GRAPHIC_OBJECTS])
         }
 
         #setting props
-        self.props_list = []
+        self.props_dict = {}
         for prop_key, prop_value in FADING_PARTICLES.items():
             if self.level_number in prop_value['level_numbers']:
                 layouts[prop_key] = import_csv_layout(prop_value['csv_folder'])
                 graphics[prop_key] = import_folder(prop_value['graphic_prop'])
-                self.props_list.append(prop_key)
-
+                self.props_dict[prop_key] = prop_value['ids']
 
         for style,layout in layouts.items():
             for row_index,row in enumerate(layout):
@@ -88,7 +85,7 @@ class Level:
                                     (x,y),col,
                                     [self.visible_sprites],
                                     self.obstacles_sprites,
-                                    self.create_attack,
+                                    self.create_weapon,
                                     self.destroy_attack,
                                     self.create_magic
                                 )
@@ -115,20 +112,15 @@ class Level:
                                     # further implementations for NPC class (or others)
                                     pass
 
-                        # if style in self.props_list:
-                        #     random_props_image = choice(graphics[style])
-                        #     Tile((x,y),col,
-                        #          [self.visible_sprites,self.obstacles_sprites,self.attackable_sprites],
-                        #          style,random_props_image)
-                        
-                        if style in self.props_list:
-                            random_props_image = choice(graphics[style])
-                            Tile((x,y),col,
-                                 [self.visible_sprites,self.obstacles_sprites,self.attackable_sprites],
-                                 style,random_props_image)
+                        if style in self.props_dict:
+                            if int(col) in self.props_dict[style]:
+                                random_props_image = choice(graphics[style])
+                                Tile((x, y), col,
+                                    [self.visible_sprites, self.obstacles_sprites, self.attackable_sprites],
+                                    style, random_props_image)
 
 
-    def create_attack(self):
+    def create_weapon(self):
         self.current_attack = Weapon(self.player,[self.visible_sprites,self.attack_sprites])
 
     def create_magic(self,style,strength,cost):
@@ -153,7 +145,7 @@ class Level:
                 if collision_sprites:
                     for target_sprite in collision_sprites:
                         # if is an attackable scenario sprite
-                        if target_sprite.sprite_type in self.props_list:
+                        if target_sprite.sprite_type in self.props_dict.keys():
                             pos = target_sprite.rect.center
                             offset = pygame.math.Vector2(0,75)
                             for fading in range(randint(3,6)):

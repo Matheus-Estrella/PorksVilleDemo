@@ -18,7 +18,7 @@ class Player(Entity):
 
         # transformations
         self.form = list(FORMS_LIST.keys())[self.transformation_index]
-        self.can_switch_form = True
+        self.can_switch_transformation = True
         self.form_switch_time = None
         
         self.animations = {}
@@ -137,8 +137,8 @@ class Player(Entity):
                 self.create_magic(style,strength,cost)
 
             # Switch form input
-            if keys[pygame.K_1] and self.can_switch_form:
-                self.can_switch_form = False
+            if keys[pygame.K_1] and self.can_switch_transformation:
+                self.can_switch_transformation = False
                 self.form_switch_time = pygame.time.get_ticks()
 
                 if self.transformation_index < len(list(FORMS_LIST.keys())) -1:
@@ -261,9 +261,9 @@ class Player(Entity):
                 self.destoy_attack()
 
         # switching form setups
-        if not self.can_switch_form:
+        if not self.can_switch_transformation:
             if current_time - self.form_switch_time >= self.switch_duration_cooldown:
-                self.can_switch_form = True
+                self.can_switch_transformation = True
 
         # switching bag setups
         if not self.can_switch_bag:

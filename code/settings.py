@@ -72,6 +72,7 @@ FORMS_LIST = { # {} are further implementations of differents settings for each 
 
 INITIAL_IMAGE = {'image':'../code/graphics/test/rock.png'}
 CHARACTER_FOLDER = '../code/graphics/player/'
+RESOURCES_TYPES = ['weapon', 'magic', 'bag', 'transformation']
 
 
 CHARACTER_ANIMATIONS = ['up', 'down', 'left', 'right', 
@@ -119,15 +120,27 @@ MAGIC_LIST = {
 # weapons
 WEAPONS_FOLDER = '../code/graphics/weapons/'
 WEAPONS_LIST = {
-    'sword':{'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/sword/full.png','accessible':True},
-    'lance' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/lance/full.png','accessible':True},
-    'axe' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/axe/full.png','accessible':True},
-    'rapier' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/rapier/full.png','accessible':True},
-    'sai': {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/sai/full.png','accessible':True},
+    # 'sword':{'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/sword/full.png','accessible':True},
+    # 'lance' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/lance/full.png','accessible':True},
+    # 'axe' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/axe/full.png','accessible':True},
+    # 'rapier' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/rapier/full.png','accessible':True},
+    # 'sai': {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/sai/full.png','accessible':True},
     'borduna':{'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/borduna/full.png','accessible':True},
     'coronha' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/coronha/full.png','accessible':True},
     'lanca' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/lanca/full.png','accessible':True},
     'tacape' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/tacape/full.png','accessible':True},
+}
+
+WEAPONS_DISPLAY_ADJUST = {
+    # 'sword':{'left':{'x':0,'y':0},'right':{'x':0,'y':0},'down':{'x':0,'y':0},'up':{'x':0,'y':0},},
+    # 'lance' : {'left':{'x':0,'y':0},'right':{'x':0,'y':0},'down':{'x':0,'y':0},'up':{'x':0,'y':0},},
+    # 'axe' : {'left':{'x':0,'y':0},'right':{'x':0,'y':0},'down':{'x':0,'y':0},'up':{'x':0,'y':0},},
+    # 'rapier' : {'left':{'x':0,'y':0},'right':{'x':0,'y':0},'down':{'x':0,'y':0},'up':{'x':0,'y':0},},
+    # 'sai': {'left':{'x':0,'y':0},'right':{'x':0,'y':0},'down':{'x':0,'y':0},'up':{'x':0,'y':0},},
+    'borduna':{'left':{'x':0,'y':0},'right':{'x':0,'y':0},'down':{'x':0,'y':0},'up':{'x':0,'y':0},},
+    'coronha' : {'left':{'x':0,'y':0},'right':{'x':0,'y':0},'down':{'x':0,'y':0},'up':{'x':0,'y':0},},
+    'lanca' : {'left':{'x':0,'y':0},'right':{'x':0,'y':0},'down':{'x':0,'y':0},'up':{'x':0,'y':0},},
+    'tacape' : {'left':{'x':0,'y':0},'right':{'x':0,'y':0},'down':{'x':0,'y':0},'up':{'x':0,'y':0},},
 }
 
 # -------------------------------------------------| INTERACTIONS AND ITEMS SETTINGS |-------------------------------------------------
@@ -190,6 +203,7 @@ or by interaction (for itens that can manifest and animation on interactions)
 
 BAG_LIST = {
     0:{'id':'1000','name':'dying_totem','quantity':3,'sprite_type':'totem',
+        'graphic': '../code/graphics/items/dying_totem/dying_totem.png',
        'talkable': False,'grabbable': False,'consumable': True,
        'collectable': True,'equippable':False,
        'sellable': False, 'value': 'The life has not a price',
@@ -199,6 +213,7 @@ BAG_LIST = {
        'upgrade':'respawn','reward':1
        },
     1:{'id':'1000','name':'test1','quantity':3,'sprite_type':'totem',
+        'graphic': '../code/graphics/items/test1/test1.png',
        'talkable': False,'grabbable': False,'consumable': True,
        'collectable': True,'equippable':False,
        'sellable': False, 'value': 'The life has not a price',
@@ -208,6 +223,7 @@ BAG_LIST = {
        'upgrade':'respawn','reward':1
        },
     2:{'id':'1000','name':'test2','quantity':3,'sprite_type':'totem',
+        'graphic': '../code/graphics/items/test2/test2.png',
        'talkable': False,'grabbable': False,'consumable': True,
        'collectable': True,'equippable':False,
        'sellable': False, 'value': 'The life has not a price',
@@ -217,6 +233,7 @@ BAG_LIST = {
        'upgrade':'respawn','reward':1
        },
     3:{'id':'1000','name':'test3','quantity':3,'sprite_type':'totem',
+        'graphic': '../code/graphics/items/test3/test3.png',
        'talkable': False,'grabbable': False,'consumable': True,
        'collectable': True,'equippable':False,
        'sellable': False, 'value': 'The life has not a price',
@@ -288,7 +305,7 @@ UI_SETTINGS = {
     # dimensions
     'bar_height':20,
     'health_bar_width': 200,
-    'energy_bar_width': 140,
+    'energy_bar_width': 150,
     # fonts
     'ui_font' :'../code/graphics/font/joystix.ttf',
     'ui_font_size':18,
@@ -298,7 +315,7 @@ UI_SETTINGS = {
     'upgrade_bg_color_selected' : '#EEEEEE',
     # item box positions
     'item_box_size' : 80,
-    'padding' : 3,
+    'padding' : 5,
     'box_pos_y' : 630,
     'box_pos_x' : 10,
 }

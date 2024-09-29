@@ -1,5 +1,6 @@
 import pygame
-from settings import MAGIC_LIST,WEAPONS_LIST,UI_SETTINGS,COLORS_SETTINGS,BAG_LIST,FORMS_LIST,CHARACTER_FOLDER,ITEMS_FOLDER
+from support import set_dictionary
+from settings import RESOURCES_TYPES,UI_SETTINGS,COLORS_SETTINGS
 
 class UI:
     def __init__(self):
@@ -16,32 +17,9 @@ class UI:
         self.side_bar_positions = self.get_bar_side_positions(0,-30)
 
         # convert weapon dictionary
-        self.weapon_graphics =[]
-        for weapon in WEAPONS_LIST.values():
-            path = weapon['graphic']
-            weapon = pygame.image.load(path).convert_alpha()
-            self.weapon_graphics.append(weapon)
-
-        # convert magic dictionary
-        self.magic_graphics =[]
-        for magic in MAGIC_LIST.values():
-            path = magic['graphic']
-            magic = pygame.image.load(magic['graphic']).convert_alpha()
-            self.magic_graphics.append(magic)
-
-        # convert bag dictionary
-        self.bag_graphics =[]
-        for bag in BAG_LIST.values():
-            path = f'{ITEMS_FOLDER}{bag["name"]}/{bag["name"]}.png'
-            bag = pygame.image.load(path).convert_alpha()
-            self.bag_graphics.append(bag)
-
-        # convert form dictionary
-        self.transformation_graphics = []
-        for form_index in FORMS_LIST.keys():
-            path = f'{CHARACTER_FOLDER}{form_index}/icon_form/icon.png'
-            form_image = pygame.image.load(path).convert_alpha()
-            self.transformation_graphics.append(form_image)
+        resources_list = RESOURCES_TYPES             
+        for resource in resources_list:
+            setattr(self, f'{resource}_graphics', set_dictionary(resource))
 
 
     def show_bar(self,current,max_amount,bg_rect,color):
@@ -96,27 +74,27 @@ class UI:
         'weapon': weapon,
         'magic': magic
         }
-    def side_bar_overlay(self, indexes, has_switchers):
-        keys = ['weapon', 'magic', 'bag', 'transformation']
-        graphics_lists = [self.weapon_graphics, self.magic_graphics, self.bag_graphics, self.transformation_graphics]
+    
+    def resources_overlay(self, indexes, has_switchers):
+        keys = RESOURCES_TYPES
+        graphics_lists = [getattr(self, f'{key}_graphics') for key in keys]
 
         for i, key in enumerate(keys):
-            bg_rect = self.selection_box(self.side_bar_positions[key][0],
-                                        self.side_bar_positions[key][1], has_switchers[i])
-            surf = graphics_lists[i][indexes[i]]
-            rect = surf.get_rect(center=bg_rect.center)
-            self.display_surface.blit(surf, rect)
+            if indexes[i] < len(graphics_lists[i]):
+                bg_rect = self.selection_box(self.side_bar_positions[key][0],
+                                            self.side_bar_positions[key][1], has_switchers[i])
+                surf = graphics_lists[i][indexes[i]]
+                rect = surf.get_rect(center=bg_rect.center)
+                self.display_surface.blit(surf, rect)
 
     def display(self,player):
         self.show_bar(player.health,player.stats['health'],self.health_bar_rect,COLORS_SETTINGS['health_color'])
         self.show_bar(player.energy,player.stats['energy'],self.energy_bar_rect,COLORS_SETTINGS['energy_color'])
 
         self.show_exp(player.exp)
-
-        indexes = [player.weapon_index, player.magic_index, player.bag_index, player.transformation_index]
-        has_switchers = [not player.can_switch_weapon, 
-                        not player.can_switch_magic, 
-                        not player.can_switch_bag, 
-                        not player.can_switch_form]
         
-        self.side_bar_overlay(indexes, has_switchers)
+        keys = RESOURCES_TYPES
+        indexes = [getattr(player, f'{key}_index') for key in keys]
+        has_switchers = [not getattr(player, f'can_switch_{key}') for key in keys]
+        
+        self.resources_overlay(indexes, has_switchers)

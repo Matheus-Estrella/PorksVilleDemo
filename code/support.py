@@ -1,4 +1,4 @@
-from settings import *
+from settings import WEAPONS_LIST,MAGIC_LIST,BAG_LIST,FORMS_LIST,CHARACTER_FOLDER,ITEMS_FOLDER
 from csv import reader
 from os import walk
 import pygame
@@ -27,3 +27,31 @@ def import_folder(path):
 
 	return surface_list
 
+def set_dictionary(dict_type):
+    dict_images = []
+    dict_list = {
+        'weapon': WEAPONS_LIST,
+        'magic': MAGIC_LIST,
+        'bag': BAG_LIST,
+        'form': FORMS_LIST,
+    }
+
+    if dict_type in dict_list:
+        if dict_type == 'transformation':
+            for element in dict_list[dict_type].keys():
+                path = f'{CHARACTER_FOLDER}{element}/icon_form/icon.png'                
+                image = pygame.image.load(path).convert_alpha()
+                dict_images.append(image)
+        else:
+            for element in dict_list[dict_type].values():
+                path = element['graphic']
+                image = pygame.image.load(path).convert_alpha()
+                dict_images.append(image)
+
+    return dict_images
+
+        # self.transformation_graphics = []
+        # for form_index in FORMS_LIST.keys():
+        #     path = f'{CHARACTER_FOLDER}{form_index}/icon_form/icon.png'
+        #     form_image = pygame.image.load(path).convert_alpha()
+        #     self.transformation_graphics.append(form_image)

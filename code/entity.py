@@ -37,6 +37,9 @@ class Entity(pygame.sprite.Sprite):
         self.hurt_time = None
         self.invulnerability_duration = 500
 
+        # drop system
+        self.drops = []
+
     def heir_types(self,pos,sprite_id):
         if self.sprite_type == PLAYER:
             can_attack = False
