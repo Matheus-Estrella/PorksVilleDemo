@@ -13,7 +13,6 @@ class Weapon(pygame.sprite.Sprite):
         self.image = pygame.image.load(full_path).convert_alpha()
 
         # placement adjust
-        gen_adj = None
         pos_adj = self.get_weapon_position_adjust(player.weapon, direction)  # Chamada do método
 
         # placement
@@ -28,6 +27,7 @@ class Weapon(pygame.sprite.Sprite):
 
         '''para refinar as posições de armas em função do sprite confirmado no frontend para testes de ajustes
         Alterá-las em WEAPONS_DISPLAY_ADJUST para cada arma'''
+        
     def get_weapon_position_adjust(self, weapon, direction): 
         if weapon in WEAPONS_DISPLAY_ADJUST and direction in WEAPONS_DISPLAY_ADJUST[weapon]:
             adj = WEAPONS_DISPLAY_ADJUST[weapon][direction]
