@@ -3,10 +3,10 @@ from debug import Debug
 from level import Level
 from settings import GAME_SOUNDS,FPS,WIDTH,HEIGHT,COLORS_SETTINGS
 
-dirpath = os.getcwd
-sys.path.append(dirpath)
-if getattr(sys,"frozen",False):
-    os.chdir(sys._MEIPASS)
+# dirpath = os.getcwd
+# sys.path.append(dirpath)
+# if getattr(sys,"frozen",False):
+#     os.chdir(sys._MEIPASS)
 
 class Game:
     def __init__(self):

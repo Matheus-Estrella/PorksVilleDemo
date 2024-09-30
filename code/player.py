@@ -181,11 +181,14 @@ class Player(Entity):
                 self.magic = list(MAGIC_LIST.keys())[self.magic_index]
 
             
-            # Master Mode On/Off
-                # adjust the debug easter egg of hacker on and off to linger more on screen
+            # Howl Cheat On/Off
             master_keys = {pygame.K_p, pygame.K_o, pygame.K_r, pygame.K_k}
-            if self.detect_code_keypress(keys, master_keys,50):
+            if self.detect_code_keypress(keys, master_keys,7000):
                 self.dm_mode = not self.dm_mode
+
+                pygame.mixer.music.load('../code/audio/howl.wav')
+                pygame.mixer.music.set_volume(0.5)
+                pygame.mixer.music.play()
 
                 debug_x = WIDTH*0.5 - 64
                 debug_y = HEIGHT*0.5 - 64

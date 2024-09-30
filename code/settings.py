@@ -1,3 +1,9 @@
+import os
+from termsSettings import *
+
+# -------------------------------------------------| CONSTANTS |-------------------------------------------------
+BASE_DIR = os.path.join(os.path.dirname(__file__), '..', 'code')  # directory base
+
 # -------------------------------------------------| MAPPING TERMS |-------------------------------------------------
 from termsSettings import *
 
@@ -20,8 +26,8 @@ HITBOX_OFFSET = {
 
 GENERAL_SOUND_ADJUST = 0.4
 GAME_SOUNDS = {
-    'main' : {'path':'../code/audio/main.ogg','volume':0.75*GENERAL_SOUND_ADJUST},
-    'weapon':{'path':'../code/audio/sword.wav','volume':0.25*GENERAL_SOUND_ADJUST}
+    'main' : {'path':os.path.join(BASE_DIR, 'audio', 'forest.ogg'),'volume':0.75*GENERAL_SOUND_ADJUST},
+    'weapon':{'path': os.path.join(BASE_DIR, 'audio', 'sword.wav'),'volume':0.25*GENERAL_SOUND_ADJUST},
 }
 
 # -------------------------------------------------| MAPPING IMAGES |-------------------------------------------------
@@ -29,34 +35,31 @@ GAME_SOUNDS = {
 # Level Images and  Map sources
 LEVEL_IMAGES = { # 'level' : {level images}
     '0':{
-        BACKGROUND:'../code/graphics/tilemap/ground.png',
-        BOUNDARY:'../code/map/map_FloorBlocks.csv',
-        LARGE_OBJECTS:'../code/map/map_Objects.csv',
-        ENTITY:'../code/map/map_Entities.csv',
-        # Background Components sources
-        GRAPHIC_PROP:'../code/graphics/grass',
-        GRAPHIC_OBJECTS:'../code/graphics/objects'
+        BACKGROUND: os.path.join(BASE_DIR, 'graphics', 'tilemap', 'ground.png'),
+        BOUNDARY: os.path.join(BASE_DIR, 'map', 'map_FloorBlocks.csv'),
+        LARGE_OBJECTS: os.path.join(BASE_DIR, 'map', 'map_Objects.csv'),
+        ENTITY: os.path.join(BASE_DIR, 'map', 'map_Entities.csv'),
+        GRAPHIC_OBJECTS: os.path.join(BASE_DIR, 'graphics', 'objects')
         },
     '1':{
-        BACKGROUND:'../code/graphics/tilemap/ground.png',
-        BOUNDARY:'../code/map/map_FloorBlocks.csv',
-        LARGE_OBJECTS:'../code/map/map_Objects.csv',
-        ENTITY:'../code/map/map_Entities.csv',
-        # Background Components sources
-        GRAPHIC_PROP:'../code/graphics/grass',
-        GRAPHIC_OBJECTS:'../code/graphics/objects'
+        BACKGROUND: os.path.join(BASE_DIR, 'graphics', 'tilemap', 'ground.png'),
+        BOUNDARY: os.path.join(BASE_DIR, 'map', 'map_FloorBlocks.csv'),
+        LARGE_OBJECTS: os.path.join(BASE_DIR, 'map', 'map_Objects.csv'),
+        ENTITY: os.path.join(BASE_DIR, 'map', 'map_Entities.csv'),
+        GRAPHIC_OBJECTS: os.path.join(BASE_DIR, 'graphics', 'objects')
         },
     }
 # -------------------------------------------------| CHARACTER SETTINGS |-------------------------------------------------
 
 FADING_PARTICLES = {
-    'leaf' :{
-        'folder':'../code/graphics/particles/leaf',
-        'graphic_prop':'../code/graphics/Grass',
-        'csv_folder' : '../code/map/map_Grass.csv',
-        'range':[1,7],
-        'level_numbers':[0],
-        'ids':[8,9,10]},
+    'leaf': {
+        'folder': os.path.join(BASE_DIR, 'graphics', 'particles', 'leaf'),
+        'graphic_prop': os.path.join(BASE_DIR, 'graphics', 'Grass'),
+        'csv_folder': os.path.join(BASE_DIR, 'map', 'map_Grass.csv'),
+        'range': [1, 7],
+        'level_numbers': [0],
+        'ids': [8, 9, 10]
+    },
 }
 
 # -------------------------------------------------| CHARACTER SETTINGS |-------------------------------------------------
@@ -70,8 +73,9 @@ FORMS_LIST = { # {} are further implementations of differents settings for each 
     3 : {},
 }
 
-INITIAL_IMAGE = {'image':'../code/graphics/test/rock.png'}
+INITIAL_IMAGE = {'image': os.path.join(BASE_DIR, 'graphics', 'test', 'rock.png')}
 CHARACTER_FOLDER = '../code/graphics/player/'
+
 RESOURCES_TYPES = ['weapon', 'magic', 'bag', 'transformation']
 
 
@@ -257,10 +261,13 @@ MONSTER_SETTINGS = {'folder':'../code/graphics/monsters/',
 
 ENTITY_MAPPING = {
     0:{'id':'394','name':'player','entity_type':PLAYER,'dying_folder':'../code/graphics/particles/smoke_orange'},
-    1:{'id':'393','name':'squid','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/smoke_orange'},
-    2:{'id':'392','name':'raccoon','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/raccoon'},
-    3:{'id':'391','name':'spirit','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/nova'},
-    4:{'id':'390','name':'bamboo','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/bamboo'}
+    1:{'id':'392','name':'raccoon','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/raccoon'},
+    # 2:{'id':'393','name':'squid','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/smoke_orange'},
+    # 3:{'id':'391','name':'spirit','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/nova'},
+    # 4:{'id':'390','name':'bamboo','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/smoke_orange'},
+    2:{'id':'393','name':'pork','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/smoke_orange'},
+    3:{'id':'391','name':'pork','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/smoke_orange'},
+    4:{'id':'390','name':'pork','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/smoke_orange'},
 }
 
 ATTACK_TYPE = ['slash','claw','thunder','leaf_attack','sparkle']
