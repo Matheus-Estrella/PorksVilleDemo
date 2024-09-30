@@ -1,3 +1,4 @@
+import time, sys
 import pygame
 from support import set_dictionary
 from settings import RESOURCES_TYPES,UI_SETTINGS,COLORS_SETTINGS
@@ -46,6 +47,25 @@ class UI:
         self.display_surface.blit(text_surf,text_rect)
         pygame.draw.rect(self.display_surface,UI_SETTINGS['ui_border_color'],text_rect.inflate(20,20),3)
 
+    # def end_game_prompt(self,end_game):
+    #     if end_game:
+    #         text_surf = self.font.render('PARABÉNS, VOCÊ SALVOU A NATUREZA HOJE', True, COLORS_SETTINGS['text_color'])
+    #         screen_width = 1280
+    #         screen_height = 720
+    #         text_rect = text_surf.get_rect(center=(screen_width // 2, screen_height // 2))
+    #         box_width = text_rect.width + 20
+    #         box_height = text_rect.height + 20
+    #         box_rect = pygame.Rect((screen_width // 2) - (box_width // 2), (screen_height // 2) - (box_height // 2), box_width, box_height)
+
+    #         pygame.draw.rect(self.display_surface, (0, 0, 0), box_rect)
+    #         pygame.draw.rect(self.display_surface, (0, 0, 0), text_rect.inflate(40,40))  # Fundo branco
+    #         pygame.draw.rect(self.display_surface, (0, 0, 0), text_rect.inflate(40,40), 3)  # Borda preta
+    #         self.display_surface.blit(text_surf, text_rect)
+            
+    #         time.sleep(15)
+    #         pygame.quit()
+    #         sys.exit()
+
     def selection_box(self,left,top,has_switched):
         bg_rect = pygame.Rect(left,top,UI_SETTINGS['item_box_size'],UI_SETTINGS['item_box_size'])
         pygame.draw.rect(self.display_surface,UI_SETTINGS['ui_bg_color'],bg_rect)
@@ -87,7 +107,7 @@ class UI:
                 rect = surf.get_rect(center=bg_rect.center)
                 self.display_surface.blit(surf, rect)
 
-    def display(self,player):
+    def display(self,player,end_game):
         self.show_bar(player.health,player.stats['health'],self.health_bar_rect,COLORS_SETTINGS['health_color'])
         self.show_bar(player.energy,player.stats['energy'],self.energy_bar_rect,COLORS_SETTINGS['energy_color'])
 
@@ -98,3 +118,4 @@ class UI:
         has_switchers = [not getattr(player, f'can_switch_{key}') for key in keys]
         
         self.resources_overlay(indexes, has_switchers)
+        # self.end_game_prompt(end_game)

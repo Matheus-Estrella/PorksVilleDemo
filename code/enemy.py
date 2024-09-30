@@ -4,7 +4,7 @@ from support import import_folder
 from settings import MONSTER_DATA, MONSTER_SETTINGS
 
 class Enemy(Entity):
-    def __init__(self,sprite_type,monster_name,pos,sprite_id,groups,obstacle_sprites,damage_player,trigger_death_particles,add_exp):
+    def __init__(self,sprite_type,monster_name,pos,sprite_id,groups,obstacle_sprites,damage_player,trigger_death_particles,add_exp,get_score):
     
         #general setup
         super().__init__(sprite_type,obstacle_sprites,pos,sprite_id,groups)
@@ -26,6 +26,7 @@ class Enemy(Entity):
         self.add_exp = add_exp
         self.damage_player = damage_player
         self.trigger_death_particles = trigger_death_particles
+        self.get_score = get_score
 
         # sounds
         self.hit_sound = pygame.mixer.Sound(MONSTER_SETTINGS['hit_sound'])
@@ -117,6 +118,7 @@ class Enemy(Entity):
     def check_death(self): # ---------> COULD BE ON ENTITIES?
         if self.health <= 0:
             self.kill()
+            self.get_score()
             self.trigger_death_particles(self.rect.center,self.monster_name)
             self.add_exp(self.exp)
             self.death_sound.play()

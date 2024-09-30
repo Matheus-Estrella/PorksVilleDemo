@@ -19,6 +19,11 @@ class Level:
         # level counter
         self.level_number = 0
 
+        # endgame
+        self.prop_counter = 0 #-137
+        self.enemy_counter = 0 #-34
+        self.end_game = False
+
         #get the display surface
         self.display_surface = pygame.display.get_surface()
         self.game_paused = False
@@ -107,7 +112,9 @@ class Level:
                                         self.obstacles_sprites,
                                         self.damage_player,
                                         self.trigger_death_particles,
-                                        self.add_exp) 
+                                        self.add_exp,
+                                        self.get_score) 
+                                    self.enemy_counter += 1
                                 else: 
                                     # further implementations for NPC class (or others)
                                     pass
@@ -118,6 +125,7 @@ class Level:
                                 Tile((x, y), col,
                                     [self.visible_sprites, self.obstacles_sprites, self.attackable_sprites],
                                     style, random_props_image)
+                                self.prop_counter += 1
 
 
     def create_weapon(self):
@@ -152,6 +160,7 @@ class Level:
                                 # TEST IF WORKS WITH ANOTHERS FADINGS ON THE FUNCTION
                                 self.animation_player.create_fading_particles(pos - offset,[self.visible_sprites],self.level_number, target_sprite.sprite_id)
                             target_sprite.kill()
+                            self.prop_counter -= 1
                         # if is an enemy
                         elif target_sprite.sprite_type == ENEMY:
                             target_sprite.get_damage(self.player,attack_sprite.sprite_type)
@@ -179,12 +188,26 @@ class Level:
     def pause_game_menu(self):
         self.game_paused = not self.game_paused
 
+    def get_score(self):
+        self.enemy_counter -= 1
+        pass
+
+    def finish_game(self):
+        if self.prop_counter == 0 and self.enemy_counter == 0:
+            return True
+        
+    def get_end_game(self):
+        return self.end_game
+
     def run(self):
         
         self.visible_sprites.custom_draw(self.player)
-        self.ui.display(self.player)
+        self.ui.display(self.player,self.end_game)
+        self.end_game = self.finish_game()
+        if self.end_game == True:
+            self.game_paused = True
         
-        if self.game_paused:
+        if self.game_paused and self.end_game == False:
             # display upgrade menu
             self.upgrade.display()
             
