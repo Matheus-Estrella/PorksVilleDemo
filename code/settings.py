@@ -98,8 +98,8 @@ MAGIC_LIST = {
     '0':{'magic_name':'flame',
          'sub_magic_name':None,
          'magic_particle':'fire',
-         'strength':75,
-         'cost':15,
+         'strength':50,
+         'cost':25,
          'attack_amount':6,
          'graphic':'../code/graphics/particles/flame/fire.png',
          'graphic_folder':'../code/graphics/particles/flame/frames',
@@ -129,10 +129,10 @@ WEAPONS_LIST = {
     # 'axe' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/axe/full.png','accessible':True},
     # 'rapier' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/rapier/full.png','accessible':True},
     # 'sai': {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/sai/full.png','accessible':True},
-    'borduna':{'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/borduna/full.png','accessible':True},
-    'coronha' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/coronha/full.png','accessible':True},
-    'lanca' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/lanca/full.png','accessible':True},
-    'tacape' : {'cooldown':100,'damage':15,'graphic':'../code/graphics/weapons/tacape/full.png','accessible':True},
+    'borduna':{'cooldown':100,'damage':10,'graphic':'../code/graphics/weapons/borduna/full.png','accessible':True},
+    'coronha' : {'cooldown':100,'damage':10,'graphic':'../code/graphics/weapons/coronha/full.png','accessible':True},
+    'lanca' : {'cooldown':100,'damage':10,'graphic':'../code/graphics/weapons/lanca/full.png','accessible':True},
+    'tacape' : {'cooldown':100,'damage':10,'graphic':'../code/graphics/weapons/tacape/full.png','accessible':True},
 }
 
 WEAPONS_DISPLAY_ADJUST = {
@@ -326,9 +326,6 @@ UI_SETTINGS = {
     'box_pos_y' : 630,
     'box_pos_x' : 10,
 }
-
-
-
 
 
 EASTER_EGG = '''                                                                                                      

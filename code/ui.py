@@ -2,6 +2,7 @@ import time, sys
 import pygame
 from support import set_dictionary
 from settings import RESOURCES_TYPES,UI_SETTINGS,COLORS_SETTINGS
+from onScreen import show_value
 
 class UI:
     def __init__(self):
@@ -36,35 +37,48 @@ class UI:
         pygame.draw.rect(self.display_surface,color,current_rect)
         pygame.draw.rect(self.display_surface,UI_SETTINGS['ui_border_color'],bg_rect,3)
 
+
     def show_exp(self,exp):
-        text_surf = self.font.render(str(int(exp)),False,COLORS_SETTINGS['text_color'])
-        x = self.display_surface.get_size()[0] -20
-        y = self.display_surface.get_size()[1] -20
-        text_rect = text_surf.get_rect(bottomright = (x,y))
-        
-        #background for exp (behind attacks)
-        pygame.draw.rect(self.display_surface,UI_SETTINGS['ui_bg_color'],text_rect.inflate(20,20))
-        self.display_surface.blit(text_surf,text_rect)
-        pygame.draw.rect(self.display_surface,UI_SETTINGS['ui_border_color'],text_rect.inflate(20,20),3)
+        text_size_factor = 0.80
+        x_offset = -130
+        y_pos = self.display_surface.get_size()[1] -80
 
-    # def end_game_prompt(self,end_game):
-    #     if end_game:
-    #         text_surf = self.font.render('PARABÉNS, VOCÊ SALVOU A NATUREZA HOJE', True, COLORS_SETTINGS['text_color'])
-    #         screen_width = 1280
-    #         screen_height = 720
-    #         text_rect = text_surf.get_rect(center=(screen_width // 2, screen_height // 2))
-    #         box_width = text_rect.width + 20
-    #         box_height = text_rect.height + 20
-    #         box_rect = pygame.Rect((screen_width // 2) - (box_width // 2), (screen_height // 2) - (box_height // 2), box_width, box_height)
+        bg_color = (54, 54, 54)
+        border_color = (98, 104, 54)
 
-    #         pygame.draw.rect(self.display_surface, (0, 0, 0), box_rect)
-    #         pygame.draw.rect(self.display_surface, (0, 0, 0), text_rect.inflate(40,40))  # Fundo branco
-    #         pygame.draw.rect(self.display_surface, (0, 0, 0), text_rect.inflate(40,40), 3)  # Borda preta
-    #         self.display_surface.blit(text_surf, text_rect)
-            
-    #         time.sleep(15)
-    #         pygame.quit()
-    #         sys.exit()
+        # Criar as linhas de texto
+        lines = {
+            '0': [
+                {'txt': 'Exp : ', 'color': (255, 255, 255)},  # Texto normal
+                {'txt': str(exp), 'color': (143, 151, 88)}
+            ], 
+        }
+        show_value(self, exp, lines, x_offset, y_pos,text_size_factor,bg_color,border_color)
+    
+    def show_goals(self, prop_counter, enemy_counter):
+        counter_type = [prop_counter, enemy_counter]
+        text_size_factor = 0.7
+        x_offset = - 230
+        y_pos = 20
+
+        bg_color = (54, 54, 54)
+        border_color = (98, 104, 54)
+
+        # Criar as linhas de texto
+        lines = {
+            '0': [{'txt': 'Missões', 'color': (255, 255, 0)}],
+            '1': [
+                {'txt': 'Destruir ', 'color': (255, 255, 255)},  # Texto normal
+                {'txt': str(counter_type[0]), 'color': (143, 151, 88)},    # Contador em amarelo
+                {'txt': ' ervas daninhas', 'color': (255, 255, 255)}  # Texto normal
+            ], 
+            '2': [
+                {'txt': 'Derrotar ', 'color': (255, 255, 255)},  # Texto normal
+                {'txt': str(counter_type[1]), 'color': (143, 151, 88)},     # Contador em amarelo
+                {'txt': ' porkos', 'color': (255, 255, 255)}     # Texto normal
+            ]
+        }
+        show_value(self, counter_type, lines, x_offset, y_pos,text_size_factor,bg_color,border_color)
 
     def selection_box(self,left,top,has_switched):
         bg_rect = pygame.Rect(left,top,UI_SETTINGS['item_box_size'],UI_SETTINGS['item_box_size'])
@@ -107,7 +121,7 @@ class UI:
                 rect = surf.get_rect(center=bg_rect.center)
                 self.display_surface.blit(surf, rect)
 
-    def display(self,player,end_game):
+    def display(self,player,prop_counter,enemy_counter):
         self.show_bar(player.health,player.stats['health'],self.health_bar_rect,COLORS_SETTINGS['health_color'])
         self.show_bar(player.energy,player.stats['energy'],self.energy_bar_rect,COLORS_SETTINGS['energy_color'])
 
@@ -118,4 +132,5 @@ class UI:
         has_switchers = [not getattr(player, f'can_switch_{key}') for key in keys]
         
         self.resources_overlay(indexes, has_switchers)
+        self.show_goals(prop_counter,enemy_counter)
         # self.end_game_prompt(end_game)

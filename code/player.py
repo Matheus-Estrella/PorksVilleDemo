@@ -159,7 +159,8 @@ class Player(Entity):
                 self.bag = list(BAG_LIST.keys())[self.bag_index]
 
             # Switch weapon input
-            if keys[pygame.K_3] and self.can_switch_weapon:
+            #if keys[pygame.K_3] and self.can_switch_weapon:
+            if keys[pygame.K_w] and self.can_switch_weapon:
                 self.can_switch_weapon = False
                 self.weapon_switch_time = pygame.time.get_ticks()
 
@@ -170,7 +171,8 @@ class Player(Entity):
                 self.weapon = list(WEAPONS_LIST.keys())[self.weapon_index]
 
             # Switch magic input
-            if keys[pygame.K_4] and self.can_switch_magic:
+            #if keys[pygame.K_4] and self.can_switch_magic:
+            if keys[pygame.K_e] and self.can_switch_magic:
                 self.can_switch_magic = False
                 self.magic_switch_time = pygame.time.get_ticks()
 
@@ -183,11 +185,11 @@ class Player(Entity):
             
             # Howl Cheat On/Off
             master_keys = {pygame.K_p, pygame.K_o, pygame.K_r, pygame.K_k}
-            if self.detect_code_keypress(keys, master_keys,7000):
+            if self.detect_code_keypress(keys, master_keys,1000):
                 self.dm_mode = not self.dm_mode
 
                 pygame.mixer.music.load('../code/audio/howl.wav')
-                pygame.mixer.music.set_volume(0.5)
+                pygame.mixer.music.set_volume(0.8)
                 pygame.mixer.music.play()
 
                 debug_x = WIDTH*0.5 - 64

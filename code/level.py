@@ -202,7 +202,7 @@ class Level:
     def run(self):
         
         self.visible_sprites.custom_draw(self.player)
-        self.ui.display(self.player,self.end_game)
+        self.ui.display(self.player,self.prop_counter, self.enemy_counter)
         self.end_game = self.finish_game()
         if self.end_game == True:
             self.game_paused = True
