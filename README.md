@@ -1,6 +1,6 @@
 # Porksville - Demo
 
-### Project iniciative by Matheus Estrella, João Romão, Victor Oliveira, Maria Eduarda Souza e Leonardo Caseri
+### Project iniciative by Matheus Estrella
 
 ![PorksVille Logo](./conception_arts/PorksVille_Logo.jpg)
 
