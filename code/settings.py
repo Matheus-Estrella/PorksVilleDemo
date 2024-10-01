@@ -261,10 +261,11 @@ MONSTER_SETTINGS = {'folder':'../code/graphics/monsters/',
 
 ENTITY_MAPPING = {
     0:{'id':'394','name':'player','entity_type':PLAYER,'dying_folder':'../code/graphics/particles/smoke_orange'},
-    1:{'id':'392','name':'raccoon','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/raccoon'},
+    #1:{'id':'392','name':'raccoon','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/raccoon'},
     # 2:{'id':'393','name':'squid','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/smoke_orange'},
     # 3:{'id':'391','name':'spirit','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/nova'},
     # 4:{'id':'390','name':'bamboo','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/smoke_orange'},
+    1:{'id':'392','name':'pigpig','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/smoke_orange'},
     2:{'id':'393','name':'pork','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/smoke_orange'},
     3:{'id':'391','name':'pork','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/smoke_orange'},
     4:{'id':'390','name':'pork','entity_type':ENEMY,'dying_folder':'../code/graphics/particles/smoke_orange'},

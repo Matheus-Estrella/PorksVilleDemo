@@ -184,7 +184,9 @@ class Player(Entity):
 
             
             # Howl Cheat On/Off
-            master_keys = {pygame.K_p, pygame.K_o, pygame.K_r, pygame.K_k}
+            # cheat temporariamente trocado para a apresntação do protótipo
+            #master_keys = {pygame.K_p, pygame.K_o, pygame.K_r, pygame.K_k}
+            master_keys = {pygame.K_u, pygame.K_i, pygame.K_v, pygame.K_o}
             if self.detect_code_keypress(keys, master_keys,1000):
                 self.dm_mode = not self.dm_mode
 
